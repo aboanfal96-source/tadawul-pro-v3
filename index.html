@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="منصة تداول احترافية للسوق المالي السعودي — تحليل فني متكامل">
+<title>منصة تداول — السوق السعودي | إعداد أبو مارية</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#07090f;--bg1:#0b0e18;--bg2:#111827;--bg3:#1a2235;--bg4:#1e2a3f;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --t1:#dde4f0;--t2:#7a8ba8;--t3:#3d4a60;
+  --up:#0fcf82;--dn:#f0445a;--up-bg:rgba(15,207,130,0.08);--dn-bg:rgba(240,68,90,0.08);
+  --blue:#4a9eff;--blue2:rgba(74,158,255,0.12);
+  --gold:#f5c842;--purple:#a78bfa;--cyan:#22d3ee;--orange:#fb923c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--bg0);color:var(--t1);font-size:12px;display:flex;flex-direction:column}
+
+/* ── TOP BAR ── */
+.topbar{height:34px;background:var(--bg1);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 10px;gap:0;flex-shrink:0;overflow:hidden}
+.logo{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:1px;padding-left:14px;border-left:1px solid var(--border);margin-left:10px;white-space:nowrap}
+.ticker-scroll{display:flex;overflow:hidden;flex:1}
+.tick{display:flex;gap:4px;align-items:center;padding:0 9px;border-left:1px solid var(--border);cursor:pointer;height:34px;transition:background .12s;white-space:nowrap}
+.tick:hover,.tick.sel{background:var(--blue2)}
+.t-sym{color:var(--t2);font-size:10px;font-family:'IBM Plex Mono',monospace}
+.t-p{font-size:11px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.t-c{font-size:9px;font-family:'IBM Plex Mono',monospace}
+.up{color:var(--up)}.dn{color:var(--dn)}
+.tb-r{display:flex;gap:7px;align-items:center;padding-right:6px;flex-shrink:0}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--up);animation:pl 1.6s infinite}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.3}}
+.badge{font-size:8px;padding:1px 5px;border-radius:2px;border:1px solid}
+.by{background:rgba(74,158,255,.1);border-color:rgba(74,158,255,.25);color:var(--blue)}
+.bd{background:rgba(245,200,66,.08);border-color:rgba(245,200,66,.2);color:var(--gold)}
+.clk{color:var(--t2);font-size:10px;font-family:'IBM Plex Mono',monospace}
+
+/* ── STRATEGY BAR ── */
+.stratbar{height:28px;background:var(--bg1);border-bottom:1px solid var(--border);display:flex;align-items:center;overflow-x:auto;flex-shrink:0}
+.stratbar::-webkit-scrollbar{height:0}
+.stab{height:28px;padding:0 11px;cursor:pointer;font-size:10px;color:var(--t2);border-left:1px solid var(--border);display:flex;align-items:center;gap:4px;white-space:nowrap;position:relative;transition:all .12s;flex-shrink:0}
+.stab:hover{color:var(--t1);background:var(--bg3)}
+.stab.active{color:#fff;background:var(--bg2)}
+.stab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.stab-dot{width:5px;height:5px;border-radius:50%}
+.s1 .stab-dot,.s1.active::after{background:#4a9eff}
+.s2 .stab-dot,.s2.active::after{background:#a78bfa}
+.s3 .stab-dot,.s3.active::after{background:#f5c842}
+.s4 .stab-dot,.s4.active::after{background:#22d3ee}
+.s5 .stab-dot,.s5.active::after{background:#fb923c}
+.s6 .stab-dot,.s6.active::after{background:#f472b6}
+.s7 .stab-dot,.s7.active::after{background:#0fcf82}
+.s8 .stab-dot,.s8.active::after{background:#ef4444}
+.s9 .stab-dot,.s9.active::after{background:#c084fc}
+.s10 .stab-dot,.s10.active::after{background:#34d399}
+.sb-actions{margin-right:auto;display:flex;gap:5px;padding:0 8px;flex-shrink:0}
+.sbtn{background:var(--blue2);border:1px solid rgba(74,158,255,.25);color:var(--blue);padding:2px 9px;border-radius:3px;cursor:pointer;font-size:10px;font-family:inherit;transition:all .15s}
+.sbtn:hover{background:rgba(74,158,255,.2)}
+.sbtn.g{background:rgba(15,207,130,.1);border-color:rgba(15,207,130,.25);color:var(--up)}
+.sbtn.y{background:rgba(245,200,66,.08);border-color:rgba(245,200,66,.2);color:var(--gold)}
+
+/* ── MAIN LAYOUT ── */
+.main{display:grid;grid-template-columns:185px 1fr 268px;flex:1;overflow:hidden;min-height:0}
+
+/* ── WATCHLIST ── */
+.lp{background:var(--bg1);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.ph{padding:5px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.pt{font-size:9px;color:var(--t2);font-weight:600;letter-spacing:.5px}
+.srch{background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--t1);padding:3px 7px;font-size:10px;font-family:inherit;width:calc(100% - 14px);margin:5px 7px;display:block;flex-shrink:0}
+.srch:focus{outline:none;border-color:var(--blue)}
+.wl{overflow-y:auto;flex:1}
+.wl::-webkit-scrollbar{width:3px}
+.wl::-webkit-scrollbar-thumb{background:var(--bg4)}
+.sec-hdr{padding:3px 8px;font-size:8px;color:var(--t3);font-weight:600;background:var(--bg2);border-bottom:1px solid var(--border);letter-spacing:.5px}
+.wi{display:flex;align-items:center;padding:5px 8px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s;position:relative}
+.wi:hover{background:var(--bg3)}
+.wi.act{background:var(--blue2)}
+.wi.act::before{content:'';position:absolute;right:0;top:0;bottom:0;width:2px;background:var(--blue)}
+.wi-sym{font-size:10px;font-weight:600;min-width:36px;color:var(--t1);font-family:'IBM Plex Mono',monospace}
+.wi-name{font-size:9px;color:var(--t2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 3px}
+.wi-r{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.wi-p{font-size:10px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.wi-pct{font-size:8px;font-family:'IBM Plex Mono',monospace}
+.sig-b{font-size:7px;padding:1px 3px;border-radius:1px;font-weight:600;margin-top:1px}
+.s-buy{background:rgba(15,207,130,.12);color:var(--up);border:1px solid rgba(15,207,130,.25)}
+.s-sell{background:rgba(240,68,90,.12);color:var(--dn);border:1px solid rgba(240,68,90,.25)}
+.s-wait{background:rgba(245,200,66,.08);color:var(--gold);border:1px solid rgba(245,200,66,.2)}
+
+/* ── CENTER ── */
+.cp{display:flex;flex-direction:column;border-right:1px solid var(--border);border-left:1px solid var(--border);overflow:hidden}
+.chdr{background:var(--bg2);padding:5px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;min-height:44px}
+.c-sym{font-size:14px;font-weight:700;color:var(--blue)}
+.c-p{font-size:18px;font-weight:700;font-family:'IBM Plex Mono',monospace}
+.c-ch{font-size:10px;padding:2px 7px;border-radius:3px;font-weight:500;font-family:'IBM Plex Mono',monospace}
+.c-stats{display:flex;gap:8px;margin-right:auto;flex-wrap:wrap}
+.cs{display:flex;flex-direction:column;align-items:center}
+.csl{font-size:8px;color:var(--t3)}
+.csv{font-size:10px;font-weight:500;font-family:'IBM Plex Mono',monospace}
+.tfs{display:flex;gap:2px;flex-shrink:0}
+.tfb{padding:2px 7px;border:1px solid var(--border2);background:none;border-radius:2px;color:var(--t2);cursor:pointer;font-size:9px;font-family:inherit;transition:all .12s}
+.tfb:hover{border-color:var(--blue);color:var(--blue)}
+.tfb.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.chart-wrap{flex:1;position:relative;min-height:0;overflow:hidden}
+#mc{position:absolute;top:0;left:0}
+.sub-wrap{height:80px;border-top:1px solid var(--border);flex-shrink:0;position:relative;overflow:hidden}
+.sub-lbl{position:absolute;top:3px;right:8px;font-size:8px;color:var(--t3);z-index:2;pointer-events:none;font-family:'IBM Plex Mono',monospace}
+#sc{position:absolute;top:0;left:0}
+
+/* ── FILTER ── */
+.fp{background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0}
+.fp-hdr{padding:5px 10px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.fp-title{font-size:10px;font-weight:600;color:var(--gold)}
+.fp-badge{font-size:9px;background:rgba(245,200,66,.1);color:var(--gold);padding:1px 6px;border-radius:2px;border:1px solid rgba(245,200,66,.2)}
+.fp-tog{margin-right:auto;color:var(--t3);font-size:10px}
+.fp-ctrls{display:flex;gap:5px;padding:5px 10px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.fc{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:2px 8px;cursor:pointer;font-size:10px;color:var(--t2);transition:all .12s;white-space:nowrap}
+.fc:hover,.fc.on{border-color:var(--blue);color:var(--blue);background:var(--blue2)}
+.fc.og{border-color:var(--gold);color:var(--gold);background:rgba(245,200,66,.08)}
+.fp-res{overflow:auto;max-height:140px}
+.fp-res::-webkit-scrollbar{height:3px;width:3px}
+.fp-res::-webkit-scrollbar-thumb{background:var(--bg4)}
+.fr-tbl{width:100%;border-collapse:collapse;font-size:10px;white-space:nowrap}
+.fr-tbl thead tr{background:var(--bg2)}
+.fr-tbl th{padding:4px 7px;color:var(--t3);font-weight:500;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.fr-tbl th:hover{color:var(--t2)}
+.fr-tbl td{padding:3px 7px;border-bottom:1px solid var(--border)}
+.fr-tbl tr:hover td{background:var(--bg3);cursor:pointer}
+.fr-tbl tr.hi td{background:rgba(74,158,255,.04)}
+.scb{height:5px;border-radius:2px;background:var(--bg4);overflow:hidden;width:50px;display:inline-block;vertical-align:middle;margin-left:3px}
+.scf{height:100%;border-radius:2px}
+.stag{font-size:8px;padding:1px 4px;border-radius:2px;font-weight:600;margin:0 1px;background:var(--blue2);color:var(--blue)}
+
+/* ── RIGHT PANEL ── */
+.rp{background:var(--bg1);display:flex;flex-direction:column;overflow:hidden}
+.rp-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.rpt{flex:1;padding:6px 3px;text-align:center;font-size:9px;color:var(--t2);cursor:pointer;border-left:1px solid var(--border);transition:all .12s}
+.rpt:last-child{border-left:none}
+.rpt:hover{color:var(--t1);background:var(--bg3)}
+.rpt.active{color:var(--blue);background:var(--blue2)}
+.rp-body{flex:1;overflow-y:auto;padding:8px}
+.rp-body::-webkit-scrollbar{width:3px}
+.rp-body::-webkit-scrollbar-thumb{background:var(--bg4)}
+.rp-pane{display:none}
+.rp-pane.active{display:block}
+
+/* ── SIGNAL CARDS ── */
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:9px;margin-bottom:7px;position:relative;overflow:hidden}
+.scard::before{content:'';position:absolute;right:0;top:0;bottom:0;width:3px}
+.scard.buy::before{background:var(--up)}
+.scard.sell::before{background:var(--dn)}
+.scard.neutral::before{background:var(--gold)}
+.sc-h{display:flex;justify-content:space-between;margin-bottom:5px}
+.sc-strat{font-size:8px;color:var(--t2);font-weight:600;letter-spacing:.4px}
+.sc-time{font-size:8px;color:var(--t3);font-family:'IBM Plex Mono',monospace}
+.sc-sig{font-size:13px;font-weight:700;margin-bottom:3px}
+.sc-sig.buy{color:var(--up)}.sc-sig.sell{color:var(--dn)}.sc-sig.neutral{color:var(--gold)}
+.sc-desc{font-size:9px;color:var(--t2);line-height:1.5;margin-bottom:6px}
+.sc-lvls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:6px}
+.sc-lv{background:var(--bg3);border-radius:2px;padding:3px 5px;text-align:center}
+.sc-ll{font-size:7px;color:var(--t3)}
+.sc-lv-v{font-size:9px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.ev{color:var(--blue)}.tv{color:var(--up)}.sv{color:var(--dn)}
+.sc-str{display:flex;align-items:center;gap:4px}
+.str-bar{flex:1;height:3px;border-radius:2px;background:var(--bg4);overflow:hidden}
+.str-fill{height:100%;border-radius:2px}
+.str-lbl{font-size:8px;color:var(--t3);white-space:nowrap}
+.str-val{font-size:9px;font-weight:700;white-space:nowrap}
+.rr-badge{font-size:8px;background:var(--blue2);color:var(--blue);padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace}
+
+/* ── INFO/GAUGE CARDS ── */
+.icard{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:8px;margin-bottom:7px}
+.ic-title{font-size:9px;color:var(--t3);font-weight:600;margin-bottom:5px;letter-spacing:.4px}
+.ic-row{display:flex;justify-content:space-between;align-items:center;padding:2px 0;border-bottom:1px solid var(--border);font-size:9px}
+.ic-row:last-child{border:none}
+.ic-l{color:var(--t2)}
+.ic-v{font-weight:500;font-family:'IBM Plex Mono',monospace}
+.gcard{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:8px;margin-bottom:7px}
+.g-title{font-size:9px;color:var(--t3);font-weight:600;margin-bottom:5px}
+.g-track{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-bottom:3px}
+.g-fill{height:100%;border-radius:3px;transition:width .5s}
+.g-marks{display:flex;justify-content:space-between;font-size:7px;color:var(--t3);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
+.g-val{font-size:16px;font-weight:700;text-align:center;font-family:'IBM Plex Mono',monospace}
+.orow{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.ol{font-size:9px;color:var(--t2)}
+.ov{font-size:10px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+
+/* ── ORDER BOOK ── */
+.ob-row{display:flex;align-items:center;gap:3px;padding:2px 0;position:relative}
+.ob-bar{position:absolute;right:0;top:0;bottom:0;border-radius:1px;opacity:.1}
+.ob-p{font-size:9px;font-weight:600;min-width:50px;z-index:1;font-family:'IBM Plex Mono',monospace}
+.ob-v{font-size:8px;color:var(--t2);flex:1;z-index:1;font-family:'IBM Plex Mono',monospace}
+.ob-t{font-size:8px;color:var(--t3);z-index:1;min-width:38px;text-align:center;font-family:'IBM Plex Mono',monospace}
+.ob-spr{text-align:center;padding:2px;font-size:8px;background:var(--bg3);border-radius:2px;color:var(--gold);margin:2px 0;font-family:'IBM Plex Mono',monospace}
+.ob-hdr{display:flex;justify-content:space-between;font-size:8px;color:var(--t3);padding-bottom:3px;border-bottom:1px solid var(--border);margin-bottom:2px}
+.tr-row{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--border);font-size:9px}
+.tr-t{color:var(--t3);font-family:'IBM Plex Mono',monospace}
+.tr-p{font-weight:600;font-family:'IBM Plex Mono',monospace}
+.tr-v{color:var(--t2);font-family:'IBM Plex Mono',monospace}
+
+/* ── STATUS BAR ── */
+.statusbar{height:22px;background:var(--bg1);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 10px;gap:14px;flex-shrink:0}
+.sb-i{font-size:9px;color:var(--t3)}
+.sb-i span{color:var(--t2)}
+
+/* ── DRAWING BAR ── */
+#dtbar button:hover{background:rgba(74,158,255,.15)!important;border-color:rgba(74,158,255,.3)!important;color:var(--blue)!important}
+
+/* ── LOADING ── */
+.ldg{display:flex;align-items:center;justify-content:center;gap:8px;height:60px;color:var(--t3);font-size:11px}
+.spin{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">TADAWUL PRO</div>
+  <div class="ticker-scroll" id="topTickers"></div>
+  <div class="tb-r">
+    <span class="badge by">Yahoo Finance</span>
+    <span class="badge bd">مؤخرة 15د</span>
+    <span class="live-dot"></span>
+    <span class="clk" id="clk">--:--:--</span>
+  </div>
+</div>
+
+<!-- STRATEGY BAR -->
+<div class="stratbar">
+  <div class="sb-actions">
+    <button class="sbtn" onclick="doScan()">⟳ مسح</button>
+    <button class="sbtn y" onclick="showTop()">★ أقوى</button>
+    <button class="sbtn g" id="rfBtn" onclick="doRefresh()">↻ تحديث</button>
+  </div>
+  <div class="stab s1 active" onclick="setSt('classic',this)"><span class="stab-dot"></span>كلاسيك</div>
+  <div class="stab s2" onclick="setSt('harmonic',this)"><span class="stab-dot"></span>هارمونيك</div>
+  <div class="stab s3" onclick="setSt('elliott',this)"><span class="stab-dot"></span>إيليوت</div>
+  <div class="stab s4" onclick="setSt('ma',this)"><span class="stab-dot"></span>متوسطات</div>
+  <div class="stab s5" onclick="setSt('osc',this)"><span class="stab-dot"></span>مذبذبات</div>
+  <div class="stab s6" onclick="setSt('candle',this)"><span class="stab-dot"></span>شموع</div>
+  <div class="stab s7" onclick="setSt('ichimoku',this)"><span class="stab-dot"></span>إيشيموكو</div>
+  <div class="stab s8" onclick="setSt('bollinger',this)"><span class="stab-dot"></span>بولنجر</div>
+  <div class="stab s9" onclick="setSt('vwap',this)"><span class="stab-dot"></span>VWAP</div>
+  <div class="stab s10" onclick="setSt('multi',this)"><span class="stab-dot"></span>متعدد</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- WATCHLIST -->
+  <div class="lp">
+    <div class="ph">
+      <span class="pt">السوق السعودي</span>
+      <span style="font-size:9px;color:var(--t3)" id="wlCnt">...</span>
+    </div>
+    <input class="srch" id="wlSearch" placeholder="ابحث بالرمز أو الاسم..." oninput="buildWL(this.value)">
+    <div class="wl" id="watchlist"><div class="ldg"><div class="spin"></div>جاري التحميل...</div></div>
+  </div>
+
+  <!-- CHART -->
+  <div class="cp">
+    <div class="chdr">
+      <span class="c-sym" id="cSym">—</span>
+      <span class="c-p" id="cPrice">—</span>
+      <span class="c-ch" id="cChg">—</span>
+      <div class="c-stats" id="cStats"></div>
+      <div class="tfs">
+        <button class="tfb" onclick="setTF('1',this)">1د</button>
+        <button class="tfb" onclick="setTF('5',this)">5د</button>
+        <button class="tfb" onclick="setTF('15',this)">15د</button>
+        <button class="tfb active" onclick="setTF('60',this)">1س</button>
+        <button class="tfb" onclick="setTF('D',this)">يوم</button>
+        <button class="tfb" onclick="setTF('W',this)">أسبوع</button>
+      </div>
+    </div>
+    <div class="chart-wrap" id="chartWrap"><canvas id="mc"></canvas></div>
+    <div class="sub-wrap" id="subWrap"><span class="sub-lbl" id="subLbl">RSI(14)</span><canvas id="sc"></canvas></div>
+
+    <!-- FILTER PANEL -->
+    <div class="fp">
+      <div class="fp-hdr" onclick="toggleFP()">
+        <span class="fp-title">🔍 فلتر الاستراتيجيات — أقوى الأسهم</span>
+        <span class="fp-badge" id="fpBadge">0 نتيجة</span>
+        <span class="fp-tog" id="fpTog">▲</span>
+      </div>
+      <div id="fpBody">
+        <div class="fp-ctrls">
+          <span class="fc on" onclick="toggleFC(this,'all')">الكل</span>
+          <span class="fc" onclick="toggleFC(this,'classic')">كلاسيك</span>
+          <span class="fc" onclick="toggleFC(this,'harmonic')">هارمونيك</span>
+          <span class="fc" onclick="toggleFC(this,'elliott')">إيليوت</span>
+          <span class="fc" onclick="toggleFC(this,'ma')">تقاطع ذهبي</span>
+          <span class="fc" onclick="toggleFC(this,'osc')">RSI تشبع</span>
+          <span class="fc" onclick="toggleFC(this,'ichimoku')">إيشيموكو</span>
+          <span class="fc" onclick="toggleFC(this,'bollinger')">بولنجر</span>
+          <span class="fc" onclick="toggleFC(this,'vwap')">VWAP</span>
+          <span style="margin-right:auto"></span>
+          <span class="fc" onclick="toggleFC(this,'buy_only')">شراء فقط</span>
+          <span class="fc" onclick="toggleFC(this,'sell_only')">بيع فقط</span>
+          <span class="fc" onclick="toggleFC(this,'strong')">قوة >80%</span>
+        </div>
+        <div class="fp-res">
+          <table class="fr-tbl">
+            <thead><tr>
+              <th onclick="sortFR('sym')">الرمز</th>
+              <th onclick="sortFR('name')">الاسم</th>
+              <th onclick="sortFR('price')">السعر</th>
+              <th onclick="sortFR('pct')">التغير%</th>
+              <th onclick="sortFR('score')">النقاط ↓</th>
+              <th>الاستراتيجيات</th>
+              <th onclick="sortFR('signal')">الإشارة</th>
+              <th>R:R</th><th>دخول</th><th>هدف</th><th>وقف</th><th></th>
+            </tr></thead>
+            <tbody id="frBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="rp">
+    <div class="rp-tabs">
+      <div class="rpt active" onclick="setRpTab('signals',this)">إشارات</div>
+      <div class="rpt" onclick="setRpTab('depth',this)">دفتر</div>
+      <div class="rpt" onclick="setRpTab('trades',this)">صفقات</div>
+      <div class="rpt" onclick="setRpTab('info',this)">معلومات</div>
+    </div>
+    <div class="rp-body">
+      <div class="rp-pane active" id="pane-signals"><div class="ldg"><span style="color:var(--t3)">اختر سهماً لعرض الإشارات</span></div></div>
+      <div class="rp-pane" id="pane-depth"></div>
+      <div class="rp-pane" id="pane-trades"></div>
+      <div class="rp-pane" id="pane-info"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="statusbar">
+  <span class="sb-i">السهم: <span id="sbS">—</span></span>
+  <span class="sb-i">الإشارة: <span id="sbR">—</span></span>
+  <span class="sb-i">الاستراتيجية: <span id="sbSt">كلاسيك</span></span>
+  <span class="sb-i">صاعد: <span id="sbUp">0</span> | هابط: <span id="sbDn">0</span></span>
+  <span class="sb-i">محمّل: <span id="sbLd">0</span>/<span id="sbTot">0</span></span>
+  <span class="sb-i">آخر تحديث: <span id="sbUpd">—</span></span>
+</div>
+
+<script src="js/stocks.js"></script>
+<script src="js/indicators.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/drawing.js"></script>
+<script src="js/signals.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
