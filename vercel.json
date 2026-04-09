@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "functions": {
+    "api/stock.js": {
+      "memory": 128,
+      "maxDuration": 10
+    }
+  },
+  "routes": [
+    { "src": "/api/stock", "dest": "/api/stock.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
