@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
+<title>TADAWUL PRO | إعداد أبو مارية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+:root {
+  --c0:#05070f; --c1:#090c18; --c2:#0d1220; --c3:#121828; --c4:#192032;
+  --b:rgba(255,255,255,.055); --b2:rgba(255,255,255,.1);
+  --t1:#dde3f0; --t2:#7a8ba8; --t3:#3d4a5e;
+  --up:#0ecf7e; --dn:#f04458; --ubg:rgba(14,207,126,.08); --dbg:rgba(240,68,88,.08);
+  --bl:#4a9eff; --bl2:rgba(74,158,255,.12);
+  --gd:#f5c842; --pu:#a78bfa; --cy:#22d3ee;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--c0);color:var(--t1);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:12px;overflow:hidden;display:flex;flex-direction:column;-webkit-tap-highlight-color:transparent;user-select:none}
+
+/* TOP BAR */
+.top{height:36px;background:var(--c1);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 10px;flex-shrink:0;gap:0;overflow:hidden}
+.logo{font-size:13px;font-weight:700;color:var(--bl);letter-spacing:1px;padding-left:12px;border-left:1px solid var(--b);margin-left:10px;white-space:nowrap;font-family:'IBM Plex Mono',monospace}
+#tickers{display:flex;overflow:hidden;flex:1}
+.tk{display:flex;gap:4px;align-items:center;padding:0 9px;border-left:1px solid var(--b);cursor:pointer;height:36px;white-space:nowrap;flex-shrink:0;transition:background .1s}
+.tk:hover,.tk.on{background:var(--bl2)}
+.tk-s{color:var(--t2);font-size:10px;font-family:'IBM Plex Mono',monospace}
+.tk-p{font-size:11px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.tk-c{font-size:9px;font-family:'IBM Plex Mono',monospace}
+.up{color:var(--up)}.dn{color:var(--dn)}
+.top-r{display:flex;gap:7px;align-items:center;padding-right:6px;flex-shrink:0}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--up);animation:bl 1.6s infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.3}}
+.bdg{font-size:8px;padding:1px 5px;border-radius:2px;border:1px solid}
+.bbl{background:rgba(74,158,255,.08);border-color:rgba(74,158,255,.2);color:var(--bl)}
+.bgd{background:rgba(245,200,66,.06);border-color:rgba(245,200,66,.18);color:var(--gd)}
+#clk{color:var(--t2);font-size:10px;font-family:'IBM Plex Mono',monospace}
+
+/* STRAT BAR */
+.sbar{height:28px;background:var(--c1);border-bottom:1px solid var(--b);display:flex;align-items:center;overflow-x:auto;flex-shrink:0;scrollbar-width:none}
+.sbar::-webkit-scrollbar{display:none}
+.sa{margin-right:auto;display:flex;gap:4px;padding:0 8px;flex-shrink:0}
+.btn{border:1px solid;padding:2px 8px;border-radius:3px;cursor:pointer;font-size:10px;font-family:inherit;transition:background .12s}
+.btn-b{background:var(--bl2);border-color:rgba(74,158,255,.25);color:var(--bl)}
+.btn-g{background:rgba(245,200,66,.07);border-color:rgba(245,200,66,.2);color:var(--gd)}
+.btn-u{background:rgba(14,207,126,.08);border-color:rgba(14,207,126,.2);color:var(--up)}
+.tab{height:28px;padding:0 10px;cursor:pointer;font-size:10px;color:var(--t2);border-left:1px solid var(--b);display:flex;align-items:center;gap:3px;white-space:nowrap;position:relative;transition:all .1s;flex-shrink:0}
+.tab:hover{color:var(--t1);background:var(--c3)}
+.tab.on{color:#fff;background:var(--c2)}
+.tab.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.dot2{width:5px;height:5px;border-radius:50%}
+.t1 .dot2,.t1.on::after{background:#4a9eff}.t2 .dot2,.t2.on::after{background:#a78bfa}
+.t3 .dot2,.t3.on::after{background:#f5c842}.t4 .dot2,.t4.on::after{background:#22d3ee}
+.t5 .dot2,.t5.on::after{background:#fb923c}.t6 .dot2,.t6.on::after{background:#f472b6}
+.t7 .dot2,.t7.on::after{background:#0ecf7e}.t8 .dot2,.t8.on::after{background:#ef4444}
+.t9 .dot2,.t9.on::after{background:#c084fc}.t10 .dot2,.t10.on::after{background:#34d399}
+
+/* LAYOUT */
+.main{display:grid;grid-template-columns:180px 1fr 260px;flex:1;min-height:0;overflow:hidden}
+
+/* WATCHLIST */
+.wlp{background:var(--c1);border-left:1px solid var(--b);display:flex;flex-direction:column;overflow:hidden}
+.wph{padding:5px 8px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.wpt{font-size:9px;color:var(--t2);font-weight:600;letter-spacing:.5px}
+#wlsr{background:var(--c3);border:1px solid var(--b);border-radius:3px;color:var(--t1);padding:3px 7px;font-size:10px;font-family:inherit;width:calc(100% - 14px);margin:5px 7px;display:block;flex-shrink:0;outline:none}
+#wlsr:focus{border-color:var(--bl)}
+.wl{overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:var(--c4) transparent}
+.wl::-webkit-scrollbar{width:3px}.wl::-webkit-scrollbar-thumb{background:var(--c4)}
+.sh{padding:3px 8px;font-size:8px;color:var(--t3);font-weight:600;background:var(--c2);border-bottom:1px solid var(--b);letter-spacing:.5px}
+.wi{display:flex;align-items:center;padding:5px 8px;cursor:pointer;border-bottom:1px solid var(--b);transition:background .08s;position:relative}
+.wi:hover{background:var(--c3)}.wi.on{background:var(--bl2)}
+.wi.on::before{content:'';position:absolute;right:0;top:0;bottom:0;width:2px;background:var(--bl)}
+.ws{font-size:10px;font-weight:600;min-width:36px;font-family:'IBM Plex Mono',monospace}
+.wn{font-size:9px;color:var(--t2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 3px}
+.wr{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.wp{font-size:10px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.wc{font-size:8px;font-family:'IBM Plex Mono',monospace}
+.sg{font-size:7px;padding:1px 3px;border-radius:1px;font-weight:600;margin-top:1px}
+.sg-b{background:rgba(14,207,126,.1);color:var(--up);border:1px solid rgba(14,207,126,.2)}
+.sg-s{background:rgba(240,68,88,.1);color:var(--dn);border:1px solid rgba(240,68,88,.2)}
+.sg-w{background:rgba(245,200,66,.07);color:var(--gd);border:1px solid rgba(245,200,66,.18)}
+
+/* CENTER */
+.ctr{display:flex;flex-direction:column;border-right:1px solid var(--b);border-left:1px solid var(--b);min-height:0;overflow:hidden}
+.chd{background:var(--c2);padding:5px 10px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;min-height:44px}
+#csym{font-size:14px;font-weight:700;color:var(--bl)}
+#cprice{font-size:18px;font-weight:700;font-family:'IBM Plex Mono',monospace}
+#cchg{font-size:10px;padding:2px 7px;border-radius:3px;font-weight:500;font-family:'IBM Plex Mono',monospace}
+#cst{display:flex;gap:8px;margin-right:auto;flex-wrap:wrap}
+.cs{display:flex;flex-direction:column;align-items:center}
+.csl{font-size:8px;color:var(--t3)}.csv{font-size:10px;font-weight:500;font-family:'IBM Plex Mono',monospace}
+.tfs{display:flex;gap:2px;flex-shrink:0}
+.tf{padding:2px 7px;border:1px solid var(--b2);background:none;border-radius:2px;color:var(--t2);cursor:pointer;font-size:9px;font-family:inherit;transition:all .1s}
+.tf:hover{border-color:var(--bl);color:var(--bl)}.tf.on{background:var(--bl);border-color:var(--bl);color:#fff}
+
+/* CHART */
+.ca{flex:1;position:relative;min-height:0;overflow:hidden}
+#lc{width:100%;height:100%}
+
+/* DRAW TOOLBAR */
+.dtb{position:absolute;top:8px;right:8px;z-index:30;display:flex;flex-direction:column;gap:2px;background:rgba(8,11,20,.97);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:4px;box-shadow:0 4px 24px rgba(0,0,0,.6)}
+.db{width:28px;height:28px;border:1px solid transparent;border-radius:3px;background:none;color:rgba(200,212,235,.6);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all .1s;line-height:1;flex-shrink:0}
+.db:hover{background:rgba(74,158,255,.15);border-color:rgba(74,158,255,.3);color:var(--bl)}
+.db.on{background:rgba(74,158,255,.22);border-color:rgba(74,158,255,.4);color:var(--bl)}
+.dsep{border-top:1px solid rgba(255,255,255,.06);margin:2px 0}
+#dcol{width:28px;height:22px;border:none;background:none;cursor:pointer;padding:0;border-radius:2px}
+#dlw{width:28px;border:1px solid rgba(255,255,255,.1);background:rgba(12,16,28,1);color:rgba(200,212,235,.8);font-size:9px;border-radius:2px;padding:1px;cursor:pointer}
+
+/* DRAW CANVAS - over chart */
+#dc{position:absolute;top:0;left:0;z-index:20;pointer-events:none;cursor:default}
+
+/* INDICATOR */
+.iw{height:88px;border-top:1px solid var(--b);flex-shrink:0;position:relative;overflow:hidden}
+#ic{width:100%;height:100%}
+#ilbl{position:absolute;top:3px;right:8px;font-size:8px;color:var(--t3);z-index:5;pointer-events:none;font-family:'IBM Plex Mono',monospace}
+
+/* FILTER PANEL */
+.fp{background:var(--c1);border-top:1px solid var(--b);flex-shrink:0}
+.fph{padding:5px 10px;background:var(--c2);border-bottom:1px solid var(--b);display:flex;align-items:center;gap:8px;cursor:pointer}
+.fpt{font-size:10px;font-weight:600;color:var(--gd)}
+.fpb{font-size:9px;background:rgba(245,200,66,.08);color:var(--gd);padding:1px 6px;border-radius:2px;border:1px solid rgba(245,200,66,.18)}
+.fpa{margin-right:auto;color:var(--t3);font-size:10px}
+.fpc{display:flex;gap:4px;padding:5px 10px;border-bottom:1px solid var(--b);flex-wrap:wrap}
+.fc{background:var(--c3);border:1px solid var(--b);border-radius:3px;padding:2px 8px;cursor:pointer;font-size:10px;color:var(--t2);transition:all .1s;white-space:nowrap}
+.fc:hover,.fc.on{border-color:var(--bl);color:var(--bl);background:var(--bl2)}
+.fc.og{border-color:var(--gd);color:var(--gd);background:rgba(245,200,66,.07)}
+.fpr{overflow:auto;max-height:130px;scrollbar-width:thin}
+.fpr::-webkit-scrollbar{width:3px;height:3px}.fpr::-webkit-scrollbar-thumb{background:var(--c4)}
+.ft{width:100%;border-collapse:collapse;font-size:10px;white-space:nowrap}
+.ft thead tr{background:var(--c2)}
+.ft th{padding:4px 7px;color:var(--t3);font-weight:500;border-bottom:1px solid var(--b);cursor:pointer;user-select:none}
+.ft th:hover{color:var(--t2)}.ft td{padding:3px 7px;border-bottom:1px solid var(--b)}
+.ft tr:hover td{background:var(--c3);cursor:pointer}.ft tr.hi td{background:rgba(74,158,255,.04)}
+.scb{height:5px;border-radius:2px;background:var(--c4);overflow:hidden;width:50px;display:inline-block;vertical-align:middle;margin-left:3px}
+.scf{height:100%;border-radius:2px}.stg{font-size:8px;padding:1px 4px;border-radius:2px;font-weight:600;margin:0 1px;background:var(--bl2);color:var(--bl)}
+
+/* RIGHT PANEL */
+.rp{background:var(--c1);display:flex;flex-direction:column;overflow:hidden}
+.rts{display:flex;border-bottom:1px solid var(--b);flex-shrink:0}
+.rt{flex:1;padding:6px 3px;text-align:center;font-size:9px;color:var(--t2);cursor:pointer;border-left:1px solid var(--b);transition:all .1s}
+.rt:last-child{border-left:none}.rt:hover{color:var(--t1);background:var(--c3)}.rt.on{color:var(--bl);background:var(--bl2)}
+.rb{flex:1;overflow-y:auto;padding:8px;scrollbar-width:thin}
+.rb::-webkit-scrollbar{width:3px}.rb::-webkit-scrollbar-thumb{background:var(--c4)}
+.pn{display:none}.pn.on{display:block}
+
+/* SIGNAL CARDS */
+.sc{background:var(--c2);border:1px solid var(--b);border-radius:5px;padding:9px;margin-bottom:7px;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;right:0;top:0;bottom:0;width:3px}
+.sc.buy::before{background:var(--up)}.sc.sell::before{background:var(--dn)}.sc.neu::before{background:var(--gd)}
+.sc-h{display:flex;justify-content:space-between;margin-bottom:5px}
+.sc-n{font-size:8px;color:var(--t2);font-weight:600;letter-spacing:.4px}.sc-t{font-size:8px;color:var(--t3);font-family:'IBM Plex Mono',monospace}
+.sc-s{font-size:13px;font-weight:700;margin-bottom:3px}.sc-s.buy{color:var(--up)}.sc-s.sell{color:var(--dn)}.sc-s.neu{color:var(--gd)}
+.sc-d{font-size:9px;color:var(--t2);line-height:1.5;margin-bottom:6px}
+.lv{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:6px}
+.lvi{background:var(--c3);border-radius:2px;padding:3px 5px;text-align:center}.lvl{font-size:7px;color:var(--t3)}.lvv{font-size:9px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.ev{color:var(--bl)}.tv{color:var(--up)}.sv{color:var(--dn)}
+.str{display:flex;align-items:center;gap:4px}
+.sb2{flex:1;height:3px;border-radius:2px;background:var(--c4);overflow:hidden}.sf{height:100%;border-radius:2px}
+.sl{font-size:8px;color:var(--t3);white-space:nowrap}.sv2{font-size:9px;font-weight:700;white-space:nowrap}
+.rrb{font-size:8px;background:var(--bl2);color:var(--bl);padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace}
+.ic{background:var(--c2);border:1px solid var(--b);border-radius:5px;padding:8px;margin-bottom:7px}
+.ict{font-size:9px;color:var(--t3);font-weight:600;margin-bottom:5px;letter-spacing:.4px}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:2px 0;border-bottom:1px solid var(--b);font-size:9px}
+.ir:last-child{border:none}.il{color:var(--t2)}.iv{font-weight:500;font-family:'IBM Plex Mono',monospace}
+.gc{background:var(--c2);border:1px solid var(--b);border-radius:5px;padding:8px;margin-bottom:7px}
+.gt{font-size:9px;color:var(--t3);font-weight:600;margin-bottom:5px}
+.gtr{height:6px;background:var(--c4);border-radius:3px;overflow:hidden;margin-bottom:3px}.gf{height:100%;border-radius:3px;transition:width .4s}
+.gm{display:flex;justify-content:space-between;font-size:7px;color:var(--t3);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
+.gv{font-size:16px;font-weight:700;text-align:center;font-family:'IBM Plex Mono',monospace}
+.ob{display:flex;align-items:center;gap:3px;padding:2px 0;position:relative}
+.obbar{position:absolute;right:0;top:0;bottom:0;border-radius:1px;opacity:.1}
+.obp{font-size:9px;font-weight:600;min-width:50px;z-index:1;font-family:'IBM Plex Mono',monospace}
+.obv{font-size:8px;color:var(--t2);flex:1;z-index:1;font-family:'IBM Plex Mono',monospace}
+.obt{font-size:8px;color:var(--t3);z-index:1;min-width:38px;text-align:center;font-family:'IBM Plex Mono',monospace}
+.obs{text-align:center;padding:2px;font-size:8px;background:var(--c3);border-radius:2px;color:var(--gd);margin:2px 0;font-family:'IBM Plex Mono',monospace}
+.obh{display:flex;justify-content:space-between;font-size:8px;color:var(--t3);padding-bottom:3px;border-bottom:1px solid var(--b);margin-bottom:2px}
+.tr{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--b);font-size:9px}
+.trt{color:var(--t3);font-family:'IBM Plex Mono',monospace}.trp{font-weight:600;font-family:'IBM Plex Mono',monospace}.trv{color:var(--t2);font-family:'IBM Plex Mono',monospace}
+
+/* STATUS */
+.st{height:22px;background:var(--c1);border-top:1px solid var(--b);display:flex;align-items:center;padding:0 10px;gap:14px;flex-shrink:0}
+.si{font-size:9px;color:var(--t3)}.si span{color:var(--t2)}
+.ldg{display:flex;align-items:center;justify-content:center;gap:8px;height:50px;color:var(--t3);font-size:10px}
+.sp{width:12px;height:12px;border:2px solid var(--b);border-top-color:var(--bl);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-track{background:var(--c1)}::-webkit-scrollbar-thumb{background:var(--c3);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top">
+  <div class="logo">TADAWUL PRO</div>
+  <div id="tickers"></div>
+  <div class="top-r">
+    <span class="bdg bbl">Yahoo Finance</span>
+    <span class="bdg bgd">مؤخرة 15د</span>
+    <span class="dot"></span>
+    <span id="clk">--:--:--</span>
+  </div>
+</div>
+
+<!-- STRAT BAR -->
+<div class="sbar">
+  <div class="sa">
+    <button class="btn btn-b" onclick="doScan()">⟳ مسح</button>
+    <button class="btn btn-g" onclick="showTop()">★ أقوى</button>
+    <button class="btn btn-u" id="rfBtn" onclick="doRefresh()">↻ تحديث</button>
+  </div>
+  <div class="tab t1 on" onclick="setSt('classic',this)"><span class="dot2"></span>كلاسيك</div>
+  <div class="tab t2" onclick="setSt('harmonic',this)"><span class="dot2"></span>هارمونيك</div>
+  <div class="tab t3" onclick="setSt('elliott',this)"><span class="dot2"></span>إيليوت</div>
+  <div class="tab t4" onclick="setSt('ma',this)"><span class="dot2"></span>متوسطات</div>
+  <div class="tab t5" onclick="setSt('osc',this)"><span class="dot2"></span>مذبذبات</div>
+  <div class="tab t6" onclick="setSt('candle',this)"><span class="dot2"></span>شموع</div>
+  <div class="tab t7" onclick="setSt('ichimoku',this)"><span class="dot2"></span>إيشيموكو</div>
+  <div class="tab t8" onclick="setSt('bollinger',this)"><span class="dot2"></span>بولنجر</div>
+  <div class="tab t9" onclick="setSt('vwap',this)"><span class="dot2"></span>VWAP</div>
+  <div class="tab t10" onclick="setSt('multi',this)"><span class="dot2"></span>متعدد</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- WATCHLIST -->
+  <div class="wlp">
+    <div class="wph"><span class="wpt">السوق السعودي</span><span id="wcnt" style="font-size:9px;color:var(--t3)">...</span></div>
+    <input id="wlsr" placeholder="بحث..." oninput="buildWL(this.value)">
+    <div class="wl" id="wl"><div class="ldg"><div class="sp"></div>تحميل...</div></div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="ctr">
+    <!-- CHART HEADER -->
+    <div class="chd">
+      <span id="csym">—</span>
+      <span id="cprice">—</span>
+      <span id="cchg">—</span>
+      <div id="cst"></div>
+      <div class="tfs">
+        <button class="tf" onclick="setTF('1mo','1d',this)">شهر</button>
+        <button class="tf on" onclick="setTF('3mo','1d',this)">3ش</button>
+        <button class="tf" onclick="setTF('6mo','1d',this)">6ش</button>
+        <button class="tf" onclick="setTF('1y','1d',this)">سنة</button>
+        <button class="tf" onclick="setTF('2y','1wk',this)">2س</button>
+      </div>
+    </div>
+
+    <!-- CHART AREA -->
+    <div class="ca" id="ca">
+      <div id="lc"></div>
+      <canvas id="dc"></canvas>
+      <div class="dtb">
+        <button class="db on" id="db_cur" onclick="setDT('cur')" title="مؤشر">⊹</button>
+        <button class="db" id="db_line" onclick="setDT('line')" title="خط اتجاه">╱</button>
+        <button class="db" id="db_hl" onclick="setDT('hl')" title="خط أفقي">━</button>
+        <button class="db" id="db_vl" onclick="setDT('vl')" title="خط عمودي">┃</button>
+        <button class="db" id="db_rect" onclick="setDT('rect')" title="مستطيل">▭</button>
+        <button class="db" id="db_fib" onclick="setDT('fib')" title="فيبوناتشي">Φ</button>
+        <button class="db" id="db_arr" onclick="setDT('arr')" title="سهم">→</button>
+        <button class="db" id="db_txt" onclick="setDT('txt')" title="نص">T</button>
+        <button class="db" id="db_er" onclick="setDT('er')" title="مسح شكل">⌫</button>
+        <button class="db" onclick="DT.shapes=[];reDraw()" title="مسح الكل">🗑</button>
+        <div class="dsep"><input type="color" id="dcol" value="#f5c842" title="اللون" onchange="DT.col=this.value"></div>
+        <select id="dlw" onchange="DT.lw=+this.value" title="سماكة">
+          <option value="1">1</option><option value="1.5" selected>1.5</option>
+          <option value="2">2</option><option value="3">3</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- INDICATOR -->
+    <div class="iw">
+      <span id="ilbl">RSI(14)</span>
+      <div id="ic"></div>
+    </div>
+
+    <!-- FILTER -->
+    <div class="fp">
+      <div class="fph" onclick="toggleFP()">
+        <span class="fpt">🔍 فلتر أقوى الأسهم</span>
+        <span class="fpb" id="fpb">0 نتيجة</span>
+        <span class="fpa" id="fpa">▲</span>
+      </div>
+      <div id="fpbd">
+        <div class="fpc">
+          <span class="fc on" onclick="toggleFC(this,'all')">الكل</span>
+          <span class="fc" onclick="toggleFC(this,'classic')">كلاسيك</span>
+          <span class="fc" onclick="toggleFC(this,'harmonic')">هارمونيك</span>
+          <span class="fc" onclick="toggleFC(this,'ma')">تقاطع ذهبي</span>
+          <span class="fc" onclick="toggleFC(this,'osc')">RSI تشبع</span>
+          <span class="fc" onclick="toggleFC(this,'bollinger')">بولنجر</span>
+          <span class="fc" onclick="toggleFC(this,'vwap')">VWAP</span>
+          <span style="margin-right:auto"></span>
+          <span class="fc" onclick="toggleFC(this,'buy_only')">شراء فقط</span>
+          <span class="fc" onclick="toggleFC(this,'sell_only')">بيع فقط</span>
+          <span class="fc" onclick="toggleFC(this,'strong')">قوة >80%</span>
+        </div>
+        <div class="fpr"><table class="ft">
+          <thead><tr>
+            <th onclick="sortFR('sym')">الرمز</th><th onclick="sortFR('name')">الاسم</th>
+            <th onclick="sortFR('price')">السعر</th><th onclick="sortFR('pct')">%</th>
+            <th onclick="sortFR('score')">النقاط ↓</th><th>الاستراتيجيات</th>
+            <th>الإشارة</th><th>R:R</th><th>دخول</th><th>هدف</th><th>وقف</th><th></th>
+          </tr></thead>
+          <tbody id="frb"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="rp">
+    <div class="rts">
+      <div class="rt on" onclick="setTab('signals',this)">إشارات</div>
+      <div class="rt" onclick="setTab('depth',this)">دفتر</div>
+      <div class="rt" onclick="setTab('trades',this)">صفقات</div>
+      <div class="rt" onclick="setTab('info',this)">معلومات</div>
+    </div>
+    <div class="rb">
+      <div class="pn on" id="pn-signals"><div class="ldg"><span style="color:var(--t3)">اختر سهماً</span></div></div>
+      <div class="pn" id="pn-depth"></div>
+      <div class="pn" id="pn-trades"></div>
+      <div class="pn" id="pn-info"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="st">
+  <span class="si">السهم: <span id="ss">—</span></span>
+  <span class="si">الإشارة: <span id="sr">—</span></span>
+  <span class="si">الاستراتيجية: <span id="sst">كلاسيك</span></span>
+  <span class="si">صاعد: <span id="sup">0</span> | هابط: <span id="sdn">0</span></span>
+  <span class="si">محمّل: <span id="sld">0</span>/<span id="stot">0</span></span>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   STOCKS — 200+ سهم سعودي
+══════════════════════════════════════════════════════ */
+const T={
+  '1010':'الرياض','1020':'الجزيرة','1030':'الاستثمار','1050':'الفرنسي','1060':'ساب','1080':'العربي',
+  '1120':'الراجحي','1140':'البلاد','1150':'الإنماء','1180':'الأهلي','1182':'أملاك','1183':'سهل',
+  '1211':'معادن','1212':'أسترا','1301':'أسلاك','1302':'بوان','1303':'رؤوم','1320':'أنابيب','1322':'أماك',
+  '2001':'كيمانول','2002':'بترو رابغ','2010':'سابك','2020':'سافكو','2030':'المصافي','2040':'الخزف',
+  '2050':'صافولا','2060':'اللجين','2070':'الكهرباء','2080':'الغاز','2090':'جبسكو','2100':'وفرة',
+  '2110':'ينساب','2120':'المتطورة','2130':'صدق','2140':'أيان','2150':'زجاج','2160':'أميانتيت',
+  '2170':'المنجم','2180':'فيبكو','2190':'سيسكو','2200':'أنابيب السعودية','2210':'نماء للكيماويات',
+  '2220':'معدنية','2222':'أرامكو','2223':'لوبريف','2230':'الكيميائية','2240':'الزامل','2250':'الجبس',
+  '2270':'سدافكو','2280':'المراعي','2281':'تنمية','2282':'نقي','2300':'صناعة الورق','2310':'سبكيم',
+  '2320':'البابطين','2330':'المتقدمة','2340':'العبداللطيف','2350':'كيان','2360':'الجزيرة للكيماويات',
+  '2370':'مبكو','2380':'بتروكيم','2381':'الحفر','2382':'أديس',
+  '3001':'حلواني','3002':'أسواق المزرعة','3003':'أسمنت المدينة','3004':'أسمنت الشمالية',
+  '3005':'أسمنت أم القرى','3007':'زهرة الواحة','3008':'الحكير','3010':'أسمنت العربية',
+  '3020':'أسمنت السعودية','3030':'أسمنت القصيم','3040':'أسمنت تبوك','3050':'أسمنت الجنوبية',
+  '3060':'أسمنت ينبع','3080':'أسمنت الشرقية','3090':'أسمنت نجران','3091':'أسمنت الجوف',
+  '4001':'العثيم','4005':'رعاية','4007':'الحمادي','4008':'ساكو','4009':'المواساة',
+  '4010':'السعودي الألماني','4011':'لازوردي','4012':'صدر','4014':'الدوائية','4020':'العقارية',
+  '4030':'البحري','4040':'سابتكو','4050':'ساسكو','4061':'أنعام','4070':'تهامة',
+  '4072':'جمجوم فارما','4080':'سناد','4100':'مكة للإنشاء','4110':'باتك','4130':'الباحة',
+  '4140':'صادرات','4150':'التصنيع','4160':'ثمار','4161':'بن داود','4162':'المهيدب',
+  '4163':'الدوا','4164':'النهدي','4170':'كنان','4180':'فتيحي','4190':'جرير',
+  '4192':'السيف غاليري','4200':'الدريس','4210':'SRMG','4220':'إكسترا','4230':'البوان',
+  '4240':'سينومي','4250':'جبل عمر','4260':'بدجت','4270':'طيبة','4280':'المملكة',
+  '4290':'صبا','4300':'دار الأركان','4310':'مدينة المعرفة','4320':'الأنابيب',
+  '4321':'الصناعات الكهربائية','4322':'رتال','4323':'سمو',
+  '4330':'الرياض ريت','4331':'الجزيرة ريت','4332':'جدوى ريت الحرمين','4333':'تعليم ريت',
+  '4334':'المعذر ريت','4335':'مشاركة ريت','4336':'ملكية ريت','4337':'سدكو ريت',
+  '4338':'الأهلي ريت','4339':'بنيان ريت','4340':'الراجحي ريت','4342':'جدوى ريت السعودية',
+  '4344':'سيكو ريت','4345':'الإنماء ريت','4346':'ميفك ريت','4347':'بلدي ريت','4348':'دراية ريت',
+  '5110':'كاتريون',
+  '6001':'هرفي','6002':'هنقرستيشن','6004':'كاف','6010':'نادك','6012':'ريدان',
+  '6013':'التطويرية الغذائية','6014':'الآمار','6015':'أمريكانا',
+  '6040':'تبوك الزراعية','6050':'الأسماك','6060':'الشرقية للتنمية',
+  '7010':'STC','7020':'اتحاد اتصالات','7030':'زين','7040':'مجموعة تداول',
+  '7200':'اللوجستية','7201':'رسن','7202':'مهارة','7203':'لمسات','7204':'توبي',
+  '8010':'التعاونية','8012':'جزيرة تكافل','8020':'ملاذ','8030':'ميدغلف',
+  '8040':'أليانز','8050':'سلامة','8060':'ولاء','8070':'الدرع العربي','8100':'سايكو',
+  '8120':'الراجحي تكافل','8150':'أسيج','8160':'الأهلية','8170':'الاتحاد',
+  '8180':'الصقر','8190':'المتحدة','8200':'الإعادة','8210':'بوبا',
+  '8230':'تكافل الراجحي','8240':'جنرالي','8250':'جي آي جي','8260':'الخليجية',
+  '8270':'بروج','8280':'العربية','8300':'الوطنية','8310':'أمانة','8311':'عناية',
+};
+const SM={'1':'مصارف','2':'صناعة','3':'إسمنت','4':'تنويع','5':'طاقة','6':'غذاء','7':'اتصالات','8':'تأمين'};
+const STKS=Object.entries(T).map(([s,n])=>({sym:s,name:n,sec:SM[s[0]]||'أخرى'}));
+const PRI=['2222','1120','2010','7010','1180','1010','1060','2280','4190','4164','2350','7030','8010','4030','3020','1150','2330'];
+const BP={'2222':27.05,'1120':83.4,'2010':70.2,'7010':44.8,'1180':33.6,'1010':25.5,'1060':53.8,
+  '1080':28.9,'1020':17.2,'1030':34.6,'1150':18.7,'1211':28.4,'2280':58.4,'2350':38.9,
+  '4190':128.4,'4164':164.2,'4030':22.1,'3020':64.2,'2020':52.0,'2330':14.2,'4050':11.8,
+  '2050':40.6,'4161':45.2,'4163':82.4,'4220':42.2,'7030':12.6,'8010':72.4,'8050':48.6,
+  '4300':12.6,'4164':164.2,'4250':14.2,'4300':12.6,'2350':38.9};
+const gB=s=>BP[s]||(10+(parseInt(s.slice(-2),10)%80));
+const SN={classic:'كلاسيك',harmonic:'هارمونيك',elliott:'إيليوت',ma:'متوسطات',osc:'RSI',
+  macd:'MACD',ichimoku:'إيشيموكو',bollinger:'بولنجر',vwap:'VWAP',stoch:'ستوكاستك'};
+
+/* ══════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════ */
+const G={
+  sel:'2222', strat:'classic', tab:'signals', tf:'3mo', tfi:'1d',
+  pr:{},op:{},hi:{},lo:{},vo:{},ch:{},pc:{},
+  cans:{},trd:{},ind:{},sc2:{},
+  ld:new Set(), ldg:new Set(),
+  fpOpen:true,
+};
+const rnd=(a,b)=>+(Math.random()*(b-a)+a).toFixed(4);
+const rI=(a,b)=>Math.floor(Math.random()*(b-a)+a);
+const fN=(n,d=2)=>n==null?'—':n.toLocaleString('en',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fK=n=>n>=1e9?(n/1e9).toFixed(1)+'B':n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(0)+'K':''+n;
+const T2=()=>{const d=new Date();return`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`};
+
+/* ══════════════════════════════════════════════════════
+   DEMO DATA — فوري، دائماً يعمل
+══════════════════════════════════════════════════════ */
+function initDemo(sym){
+  const b=gB(sym);
+  const p=+(b*(1+rnd(-0.015,0.015))).toFixed(2);
+  const pv=+(p*(1+rnd(-0.02,0.02))).toFixed(2);
+  G.pr[sym]=p; G.op[sym]=+(p*(1+rnd(-0.01,0.01))).toFixed(2);
+  G.hi[sym]=+(p*(1+rnd(0.003,0.015))).toFixed(2);
+  G.lo[sym]=+(p*(1-rnd(0.003,0.015))).toFixed(2);
+  G.vo[sym]=rI(50000,3000000);
+  G.ch[sym]=+(p-pv).toFixed(2);
+  G.pc[sym]=+((p-pv)/pv*100).toFixed(2);
+  G.trd[sym]=[];
+  const cs=[]; let cp=b;
+  const now=Math.floor(Date.now()/1000);
+  for(let i=0;i<90;i++){
+    const o=+cp.toFixed(2),c=+(o*(1+rnd(-0.015,0.015))).toFixed(2);
+    cs.push({time:now-(90-i)*86400,open:o,high:+(Math.max(o,c)*(1+rnd(0,.008))).toFixed(2),low:+(Math.min(o,c)*(1-rnd(0,.008))).toFixed(2),close:c,volume:rI(20000,600000)});
+    cp=c;
+  }
+  G.cans[sym]=cs; calcInd(sym); calcSc(sym);
+}
+
+/* ══════════════════════════════════════════════════════
+   YAHOO FINANCE
+══════════════════════════════════════════════════════ */
+function pYahoo(res,sym){
+  const m=res.meta||{},ts=res.timestamp||[],q=res.indicators?.quote?.[0]||{};
+  const cs=[];
+  for(let i=0;i<ts.length;i++){
+    const o=q.open?.[i],h=q.high?.[i],l=q.low?.[i],c=q.close?.[i],v=q.volume?.[i];
+    if(o!=null&&c!=null&&!isNaN(c)&&c>0)
+      cs.push({time:ts[i],open:+o.toFixed(2),high:+h.toFixed(2),low:+l.toFixed(2),close:+c.toFixed(2),volume:v||0});
+  }
+  if(cs.length<10)return null;
+  const last=cs[cs.length-1];
+  const pv=+(m.previousClose||m.chartPreviousClose||cs[cs.length-2]?.close||last.open).toFixed(2);
+  return{sym,cs,price:+(m.regularMarketPrice||last.close).toFixed(2),pv,hi:last.high,lo:last.low,op:last.open,vo:last.volume};
+}
+function applyY(sym,d){
+  G.cans[sym]=d.cs; G.pr[sym]=d.price; G.op[sym]=d.op;
+  G.hi[sym]=d.hi; G.lo[sym]=d.lo; G.vo[sym]=d.vo;
+  G.ch[sym]=+(d.price-d.pv).toFixed(2);
+  G.pc[sym]=+((d.price-d.pv)/d.pv*100).toFixed(2);
+  G.trd[sym]=G.trd[sym]||[]; calcInd(sym); calcSc(sym);
+}
+async function loadS(sym,range,interval){
+  if(G.ldg.has(sym))return; G.ldg.add(sym);
+  const r=range||G.tf,i=interval||G.tfi;
+  let ok=false;
+  // 1) Vercel API
+  try{
+    const rsp=await fetch(`/api/stock?symbol=${sym}&range=${r}&interval=${i}`,{signal:AbortSignal.timeout(7000)});
+    if(rsp.ok){const d=await rsp.json();const res=d?.chart?.result?.[0];if(res){const p=pYahoo(res,sym);if(p){applyY(sym,p);ok=true;}}}
+  }catch(e){}
+  // 2) CORS proxy fallback
+  if(!ok){
+    const u=`https://query1.finance.yahoo.com/v8/finance/chart/${sym}.SR?range=${r}&interval=${i}`;
+    for(const px of['https://api.allorigins.win/raw?url=','https://corsproxy.io/?']){
+      if(ok)break;
+      try{const rsp=await fetch(px+encodeURIComponent(u),{signal:AbortSignal.timeout(8000)});if(rsp.ok){const d=await rsp.json();const res=d?.chart?.result?.[0];if(res){const p=pYahoo(res,sym);if(p){applyY(sym,p);ok=true;}}}}catch(e){}
+    }
+  }
+  G.ld.add(sym); G.ldg.delete(sym);
+}
+
+/* ══════════════════════════════════════════════════════
+   INDICATORS
+══════════════════════════════════════════════════════ */
+function calcInd(sym){
+  const cs=G.cans[sym];if(!cs||cs.length<10)return;
+  const cl=cs.map(c=>c.close),hi=cs.map(c=>c.high),lo=cs.map(c=>c.low),n=cl.length;
+  const ra=calcRSI(cl,14);
+  const e12=ema(cl,12),e26=ema(cl,26),ml=e12.map((v,i)=>v-e26[i]),sl=ema(ml,9),mh=ml.map((v,i)=>v-sl[i]);
+  const kp=Math.min(14,n),hh=Math.max(...hi.slice(-kp)),ll=Math.min(...lo.slice(-kp));
+  const s20=cl.slice(-Math.min(20,n)),m20=s20.reduce((a,b)=>a+b,0)/s20.length;
+  const std=Math.sqrt(s20.map(v=>(v-m20)**2).reduce((a,b)=>a+b,0)/s20.length);
+  const h9=Math.max(...hi.slice(-9)),l9=Math.min(...lo.slice(-9));
+  const h26=Math.max(...hi.slice(-Math.min(26,n))),l26=Math.min(...lo.slice(-Math.min(26,n)));
+  const h52=Math.max(...hi.slice(-Math.min(52,n))),l52=Math.min(...lo.slice(-Math.min(52,n)));
+  let cpv=0,cv=0; cs.slice(-20).forEach(c=>{const tp=(c.high+c.low+c.close)/3;cpv+=tp*c.volume;cv+=c.volume;});
+  G.ind[sym]={
+    rsi:ra[n-1]||50, ra,
+    macd:{v:ml[n-1]||0,s:sl[n-1]||0,h:mh[n-1]||0}, ml, mh,
+    stoch:{k:hh===ll?50:+((cl[n-1]-ll)/(hh-ll)*100).toFixed(1)},
+    boll:{u:+(m20+2*std).toFixed(2),m:+m20.toFixed(2),l:+(m20-2*std).toFixed(2)},
+    ichi:{t:(h9+l9)/2,k:(h26+l26)/2,cl:(h52+l52)/2},
+    vwap:cv?+(cpv/cv).toFixed(2):cl[n-1],
+    ma9:cl.slice(-9).reduce((a,b)=>a+b,0)/Math.min(9,n),
+    ma20:m20,
+    ma50:cl.slice(-Math.min(50,n)).reduce((a,b)=>a+b,0)/Math.min(50,n),
+  };
+}
+function calcRSI(cl,p){
+  const o=new Array(Math.min(p,cl.length)).fill(50);let g=0,l=0;
+  for(let i=1;i<Math.min(p,cl.length);i++){const d=cl[i]-cl[i-1];d>0?g+=d:l+=Math.abs(d);}
+  g/=p;l/=p;
+  for(let i=p;i<cl.length;i++){const d=cl[i]-cl[i-1];g=(g*(p-1)+(d>0?d:0))/p;l=(l*(p-1)+(d<0?Math.abs(d):0))/p;o.push(l===0?100:+(100-100/(1+g/l)).toFixed(2));}
+  return o;
+}
+function ema(arr,p){const k=2/(p+1);let e=arr.slice(0,Math.min(p,arr.length)).reduce((a,b)=>a+b,0)/Math.min(p,arr.length);return arr.map((v,i)=>{if(i>0)e=v*k+e*(1-k);return +e.toFixed(4);});}
+
+/* ══════════════════════════════════════════════════════
+   SCORE ENGINE
+══════════════════════════════════════════════════════ */
+function calcSc(sym){
+  const p=G.pr[sym];if(!p||!G.ind[sym])return;
+  const{rsi,macd,stoch,boll,ichi,vwap,ma9,ma20,ma50}=G.ind[sym];
+  const cs=G.cans[sym]||[],cl=cs.map(c=>c.close),n=cl.length;
+  let sigs={},buy=0,sell=0;
+  const sup=G.lo[sym]||p*.95,res=G.hi[sym]||p*1.05;
+  if(Math.abs(p-sup)/p<.02){sigs.classic='شراء';buy++;}else if(Math.abs(p-res)/p<.02){sigs.classic='بيع';sell++;}else sigs.classic='محايد';
+  if(stoch.k<20&&p<boll.m){sigs.harmonic='شراء';buy++;}else if(stoch.k>80&&p>boll.m){sigs.harmonic='بيع';sell++;}else sigs.harmonic='محايد';
+  const roc=n>5?((cl[n-1]-cl[n-6])/cl[n-6]*100):0;
+  if(roc>2&&rsi<65){sigs.elliott='شراء';buy++;}else if(roc<-2&&rsi>35){sigs.elliott='بيع';sell++;}else sigs.elliott='محايد';
+  if(ma9>ma20&&ma20>ma50){sigs.ma='شراء';buy++;}else if(ma9<ma20&&ma20<ma50){sigs.ma='بيع';sell++;}else sigs.ma='محايد';
+  if(rsi<30){sigs.osc='شراء';buy++;}else if(rsi>70){sigs.osc='بيع';sell++;}else sigs.osc='محايد';
+  if(macd.v>macd.s&&macd.h>0){sigs.macd='شراء';buy++;}else if(macd.v<macd.s&&macd.h<0){sigs.macd='بيع';sell++;}else sigs.macd='محايد';
+  if(p>ichi.cl&&ichi.t>ichi.k){sigs.ichimoku='شراء';buy++;}else if(p<ichi.cl&&ichi.t<ichi.k){sigs.ichimoku='بيع';sell++;}else sigs.ichimoku='محايد';
+  if(p<boll.l){sigs.bollinger='شراء';buy++;}else if(p>boll.u){sigs.bollinger='بيع';sell++;}else sigs.bollinger='محايد';
+  if(p<vwap*.985){sigs.vwap='شراء';buy++;}else if(p>vwap*1.015){sigs.vwap='بيع';sell++;}else sigs.vwap='محايد';
+  if(stoch.k<20){sigs.stoch='شراء';buy++;}else if(stoch.k>80){sigs.stoch='بيع';sell++;}else sigs.stoch='محايد';
+  const net=buy-sell,tot=buy+sell,main=net>2?'شراء':net<-2?'بيع':'محايد',str=tot>0?Math.round(Math.max(buy,sell)/tot*100):50;
+  const atr=Math.max((G.hi[sym]||p)-(G.lo[sym]||p*.95),p*.01)*.5;
+  const actv=Object.entries(sigs).filter(([,v])=>v!=='محايد').map(([k])=>k);
+  G.sc2[sym]={sigs,main,str,buy,sell,entry:p,tp:main==='شراء'?+(p+atr*2).toFixed(2):+(p-atr*2).toFixed(2),sl:main==='شراء'?+(p-atr).toFixed(2):+(p+atr).toFixed(2),actv};
+}
+
+/* ══════════════════════════════════════════════════════
+   CHART ENGINE — LightweightCharts CORRECTLY
+══════════════════════════════════════════════════════ */
+let LC=null, CS=null, VS=null;
+let LI=null, RSI_S=null, MCD_S=null, MCH_S=null;
+let OVL=[];
+
+function createLC(){
+  const d=document.getElementById('lc');
+  const id=document.getElementById('ic');
+
+  // ── MAIN CHART ──
+  LC=LightweightCharts.createChart(d,{
+    width:d.clientWidth, height:d.clientHeight,
+    layout:{background:{type:LightweightCharts.ColorType.Solid,color:'#05070f'},textColor:'#7a8ba8',fontFamily:"'IBM Plex Mono',monospace"},
+    grid:{vertLines:{color:'rgba(25,32,50,.25)'},horzLines:{color:'rgba(25,32,50,.25)'}},
+    crosshair:{mode:LightweightCharts.CrosshairMode.Normal,
+      vertLine:{color:'rgba(74,158,255,.5)',width:1,style:0,labelBackgroundColor:'#090c18'},
+      horzLine:{color:'rgba(74,158,255,.5)',width:1,style:0,labelBackgroundColor:'#090c18'}},
+    rightPriceScale:{borderColor:'rgba(25,32,50,.4)',scaleMargins:{top:.06,bottom:.08}},
+    timeScale:{borderColor:'rgba(25,32,50,.4)',rightOffset:8,timeVisible:true,secondsVisible:false},
+    handleScroll:true,
+    handleScale:true,
+    kineticScroll:{touch:true,mouse:true},
+  });
+
+  CS=LC.addCandlestickSeries({
+    upColor:'#0ecf7e',downColor:'#f04458',
+    borderUpColor:'#0ecf7e',borderDownColor:'#f04458',
+    wickUpColor:'rgba(14,207,126,.55)',wickDownColor:'rgba(240,68,88,.55)',
+  });
+  VS=LC.addHistogramSeries({priceFormat:{type:'volume'},priceScaleId:'',scaleMargins:{top:.86,bottom:0}});
+
+  // ── INDICATOR CHART ──
+  LI=LightweightCharts.createChart(id,{
+    width:id.clientWidth, height:id.clientHeight,
+    layout:{background:{type:LightweightCharts.ColorType.Solid,color:'#05070f'},textColor:'#7a8ba8',fontFamily:"'IBM Plex Mono',monospace"},
+    grid:{vertLines:{color:'rgba(25,32,50,.12)'},horzLines:{color:'rgba(25,32,50,.12)'}},
+    crosshair:{mode:LightweightCharts.CrosshairMode.Normal,
+      vertLine:{color:'rgba(74,158,255,.3)',width:1,style:2},
+      horzLine:{color:'rgba(74,158,255,.3)',width:1,style:2}},
+    rightPriceScale:{borderColor:'rgba(25,32,50,.2)',scaleMargins:{top:.08,bottom:.08}},
+    timeScale:{visible:false},
+    handleScroll:true,handleScale:true,
+  });
+
+  RSI_S=LI.addLineSeries({color:'#4a9eff',lineWidth:1.5,priceLineVisible:false,lastValueVisible:true});
+  [30,50,70].forEach(v=>RSI_S.createPriceLine({price:v,color:v===50?'rgba(122,139,168,.2)':v===30?'rgba(14,207,126,.25)':'rgba(240,68,88,.25)',lineWidth:1,lineStyle:LightweightCharts.LineStyle.Dashed,axisLabelVisible:true}));
+  MCD_S=LI.addLineSeries({color:'#f5c842',lineWidth:1,priceLineVisible:false,lastValueVisible:false,visible:false});
+  MCH_S=LI.addHistogramSeries({priceScaleId:'',scaleMargins:{top:.1,bottom:0},priceLineVisible:false,lastValueVisible:false,visible:false});
+
+  // ── SYNC SCROLL ──
+  let sync=false;
+  LC.timeScale().subscribeVisibleLogicalRangeChange(r=>{if(sync)return;sync=true;if(r)LI.timeScale().setVisibleLogicalRange(r);sync=false;});
+  LI.timeScale().subscribeVisibleLogicalRangeChange(r=>{if(sync)return;sync=true;if(r)LC.timeScale().setVisibleLogicalRange(r);sync=false;});
+
+  // ── RESIZE ──
+  const ro=new ResizeObserver(()=>{
+    const cw=d.clientWidth,ch=d.clientHeight;
+    if(cw>5&&ch>5)LC.applyOptions({width:cw,height:ch});
+    const iw=id.clientWidth,ih=id.clientHeight;
+    if(iw>5&&ih>5)LI.applyOptions({width:iw,height:ih});
+    const cv=document.getElementById('dc'),area=document.getElementById('ca');
+    if(cv&&area){cv.width=area.clientWidth;cv.height=area.clientHeight;reDraw();}
+  });
+  ro.observe(d); ro.observe(id);
+}
+
+// Draw chart data for a symbol — JUST setData, no series recreation
+function drawChart(sym){
+  const cs=G.cans[sym];
+  if(!cs||cs.length<2)return;
+  if(!LC)createLC();
+
+  CS.setData(cs);
+  VS.setData(cs.map(c=>({time:c.time,value:c.volume,color:c.close>=c.open?'rgba(14,207,126,.11)':'rgba(240,68,88,.11)'})));
+  drawOverlays(sym);
+  drawInd(sym);
+  LC.timeScale().fitContent();
+}
+
+function drawInd(sym){
+  const ind=G.ind[sym];if(!ind||!LI)return;
+  const cs=G.cans[sym];if(!cs)return;
+  const useMACD=['osc','bollinger','multi'].includes(G.strat);
+  RSI_S.applyOptions({visible:!useMACD});
+  MCD_S.applyOptions({visible:useMACD});
+  MCH_S.applyOptions({visible:useMACD});
+  document.getElementById('ilbl').textContent=useMACD?'MACD':'RSI(14)';
+  if(!useMACD){
+    RSI_S.setData(cs.map((c,i)=>ind.ra[i]!=null?{time:c.time,value:ind.ra[i]}:null).filter(Boolean));
+  } else {
+    MCD_S.setData(cs.map((c,i)=>ind.ml[i]!=null?{time:c.time,value:ind.ml[i]}:null).filter(Boolean));
+    MCH_S.setData(cs.map((c,i)=>ind.mh[i]!=null?{time:c.time,value:ind.mh[i],color:ind.mh[i]>=0?'rgba(14,207,126,.55)':'rgba(240,68,88,.55)'}:null).filter(Boolean));
+  }
+  LI.timeScale().fitContent();
+}
+
+function drawOverlays(sym){
+  OVL.forEach(s=>{try{LC.removeSeries(s);}catch(e){}});OVL=[];
+  const ind=G.ind[sym];if(!ind)return;
+  const cs=G.cans[sym];if(!cs)return;
+  const s=G.strat;
+  const addL=(col,lw,dash)=>{const l=LC.addLineSeries({color:col,lineWidth:lw||1,lineStyle:dash?LightweightCharts.LineStyle.Dashed:0,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});OVL.push(l);return l;};
+
+  if(s==='ma'||s==='multi'){
+    const cl=cs.map(c=>c.close);
+    [[9,'#f5c842'],[20,'#4a9eff'],[50,'#a78bfa']].forEach(([p,col])=>{
+      const v=cl.map((_,i)=>i<p-1?null:cl.slice(i-p+1,i+1).reduce((a,b)=>a+b,0)/p);
+      addL(col,1.2).setData(cs.map((c,i)=>v[i]!=null?{time:c.time,value:v[i]}:null).filter(Boolean));
+    });
+  }
+  if(s==='bollinger'||s==='multi'){
+    const cl=cs.map(c=>c.close);
+    const v=cl.map((_,i)=>{if(i<19)return null;const sl=cl.slice(i-19,i+1),m=sl.reduce((a,b)=>a+b,0)/20,s=Math.sqrt(sl.map(v=>(v-m)**2).reduce((a,b)=>a+b,0)/20);return{u:m+2*s,m,l:m-2*s};});
+    addL('rgba(167,139,250,.6)',.8).setData(cs.map((c,i)=>v[i]?{time:c.time,value:v[i].u}:null).filter(Boolean));
+    addL('rgba(74,158,255,.5)',.7).setData(cs.map((c,i)=>v[i]?{time:c.time,value:v[i].m}:null).filter(Boolean));
+    addL('rgba(167,139,250,.6)',.8).setData(cs.map((c,i)=>v[i]?{time:c.time,value:v[i].l}:null).filter(Boolean));
+  }
+  if(s==='ichimoku'){
+    const hi=cs.map(c=>c.high),lo=cs.map(c=>c.low);
+    const dn=(p,i)=>(Math.max(...hi.slice(Math.max(0,i-p+1),i+1))+Math.min(...lo.slice(Math.max(0,i-p+1),i+1)))/2;
+    addL('#f04458',1).setData(cs.map((c,i)=>({time:c.time,value:dn(9,i)})));
+    addL('#4a9eff',1.2).setData(cs.map((c,i)=>({time:c.time,value:dn(26,i)})));
+  }
+  if(s==='vwap'){
+    const cl=cs.map(c=>c.close),vo=cs.map(c=>c.volume);
+    let cv=0,cpv=0;const vw=cl.map((c,i)=>{cv+=vo[i];cpv+=c*vo[i];return cv?cpv/cv:c;});
+    addL('#22d3ee',1.8,true).setData(cs.map((c,i)=>({time:c.time,value:vw[i]})));
+  }
+  if((s==='classic'||s==='multi')&&G.hi[sym]&&G.lo[sym]){
+    CS.createPriceLine({price:G.hi[sym],color:'rgba(240,68,88,.5)',lineWidth:1,lineStyle:LightweightCharts.LineStyle.Dashed,axisLabelVisible:true,title:'مقاومة'});
+    CS.createPriceLine({price:G.lo[sym],color:'rgba(14,207,126,.5)',lineWidth:1,lineStyle:LightweightCharts.LineStyle.Dashed,axisLabelVisible:true,title:'دعم'});
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   DRAWING TOOLS
+══════════════════════════════════════════════════════ */
+const DT={tool:'cur',shapes:[],drawing:false,start:null,col:'#f5c842',lw:1.5};
+const FIB=[0,.236,.382,.5,.618,.786,1];
+
+function setDT(t){
+  DT.tool=t; DT.drawing=false; DT.start=null;
+  document.querySelectorAll('.db').forEach(b=>b.classList.remove('on'));
+  document.getElementById('db_'+t)?.classList.add('on');
+  const cv=document.getElementById('dc');
+  cv.style.pointerEvents=t==='cur'?'none':'auto';
+  cv.style.cursor=t==='cur'?'default':t==='er'?'cell':'crosshair';
+  document.getElementById('lc').style.pointerEvents=t==='cur'?'auto':'none';
+}
+
+function initDC(){
+  const area=document.getElementById('ca');
+  const cv=document.getElementById('dc');
+  cv.width=area.clientWidth; cv.height=area.clientHeight;
+  cv.style.pointerEvents='none';
+
+  const gp=e=>{const r=cv.getBoundingClientRect(),s=e.touches?e.touches[0]:e;return{x:Math.round(s.clientX-r.left),y:Math.round(s.clientY-r.top)};};
+  const ep=e=>{const r=cv.getBoundingClientRect(),s=e.changedTouches?e.changedTouches[0]:e;return{x:Math.round(s.clientX-r.left),y:Math.round(s.clientY-r.top)};};
+
+  cv.addEventListener('mousedown',e=>{
+    if(DT.tool==='cur')return;
+    e.preventDefault();e.stopPropagation();
+    const p=gp(e);
+    if(DT.tool==='er'){erAt(p.x,p.y);return;}
+    if(DT.tool==='txt'){addTxt(p.x,p.y);return;}
+    DT.drawing=true; DT.start={x:p.x,y:p.y};
+  });
+  cv.addEventListener('mousemove',e=>{
+    if(!DT.drawing||!DT.start)return;
+    const p=gp(e); reDraw(); drawPrev(p.x,p.y);
+  });
+  document.addEventListener('mouseup',e=>{
+    if(!DT.drawing||!DT.start)return;
+    const p=ep(e);
+    if(Math.abs(p.x-DT.start.x)>3||Math.abs(p.y-DT.start.y)>3)
+      DT.shapes.push({t:DT.tool,x1:DT.start.x,y1:DT.start.y,x2:p.x,y2:p.y,col:DT.col,lw:DT.lw});
+    DT.drawing=false; DT.start=null; reDraw();
+  });
+  cv.addEventListener('touchstart',e=>{if(DT.tool==='cur')return;e.preventDefault();e.stopPropagation();const p=gp(e);if(DT.tool==='er'){erAt(p.x,p.y);return;}if(DT.tool==='txt'){addTxt(p.x,p.y);return;}DT.drawing=true;DT.start={x:p.x,y:p.y};},{passive:false});
+  cv.addEventListener('touchmove',e=>{if(!DT.drawing||!DT.start)return;e.preventDefault();const p=gp(e);reDraw();drawPrev(p.x,p.y);},{passive:false});
+  cv.addEventListener('touchend',e=>{if(!DT.drawing||!DT.start)return;const p=ep(e);if(Math.abs(p.x-DT.start.x)>3||Math.abs(p.y-DT.start.y)>3)DT.shapes.push({t:DT.tool,x1:DT.start.x,y1:DT.start.y,x2:p.x,y2:p.y,col:DT.col,lw:DT.lw});DT.drawing=false;DT.start=null;reDraw();},{passive:false});
+}
+
+function reDraw(){
+  const cv=document.getElementById('dc');if(!cv)return;
+  const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);
+  DT.shapes.forEach(s=>dShape(ctx,s,cv.width,cv.height));
+}
+function drawPrev(ex,ey){
+  if(!DT.start)return;
+  const cv=document.getElementById('dc'),ctx=cv.getContext('2d');
+  ctx.globalAlpha=.6;dShape(ctx,{t:DT.tool,x1:DT.start.x,y1:DT.start.y,x2:ex,y2:ey,col:DT.col,lw:DT.lw},cv.width,cv.height);ctx.globalAlpha=1;
+}
+function dShape(ctx,s,W,H){
+  ctx.strokeStyle=s.col;ctx.fillStyle=s.col;ctx.lineWidth=s.lw;ctx.setLineDash([]);
+  if(s.t==='line'){ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();}
+  else if(s.t==='hl'){ctx.setLineDash([6,3]);ctx.beginPath();ctx.moveTo(0,s.y1);ctx.lineTo(W,s.y1);ctx.stroke();ctx.setLineDash([]);}
+  else if(s.t==='vl'){ctx.beginPath();ctx.moveTo(s.x1,0);ctx.lineTo(s.x1,H);ctx.stroke();}
+  else if(s.t==='rect'){ctx.strokeRect(s.x1,s.y1,s.x2-s.x1,s.y2-s.y1);ctx.fillStyle=s.col+'16';ctx.fillRect(s.x1,s.y1,s.x2-s.x1,s.y2-s.y1);}
+  else if(s.t==='fib'){
+    const dy=s.y2-s.y1;
+    FIB.forEach((f,i)=>{const y=s.y1+dy*f;ctx.strokeStyle=f===0||f===1?s.col:s.col+'99';ctx.lineWidth=f===0||f===1?1.2:.7;ctx.setLineDash(f===.5?[4,3]:[]);ctx.beginPath();ctx.moveTo(Math.min(s.x1,s.x2),y);ctx.lineTo(W-54,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=s.col+'dd';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText(`${(f*100).toFixed(1)}%`,W-52,y+3);});
+    ctx.strokeStyle=s.col;ctx.lineWidth=s.lw;ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();
+  }
+  else if(s.t==='arr'){ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();const a=Math.atan2(s.y2-s.y1,s.x2-s.x1),sz=10;ctx.beginPath();ctx.moveTo(s.x2,s.y2);ctx.lineTo(s.x2-sz*Math.cos(a-.4),s.y2-sz*Math.sin(a-.4));ctx.lineTo(s.x2-sz*Math.cos(a+.4),s.y2-sz*Math.sin(a+.4));ctx.closePath();ctx.fill();}
+  else if(s.t==='txt'){ctx.font=`${s.fs||13}px IBM Plex Sans Arabic,sans-serif`;ctx.fillStyle=s.col;ctx.fillText(s.tx||'',s.x1,s.y1);}
+}
+function erAt(x,y){
+  DT.shapes=DT.shapes.filter(s=>{
+    if(s.t==='hl')return Math.abs(s.y1-y)>14;
+    if(s.t==='vl')return Math.abs(s.x1-x)>14;
+    if(s.t==='txt')return!(Math.abs(s.x1-x)<60&&Math.abs(s.y1-y)<20);
+    const dx=s.x2-s.x1,dy=s.y2-s.y1,l=dx*dx+dy*dy;
+    const t=l?Math.max(0,Math.min(1,((x-s.x1)*dx+(y-s.y1)*dy)/l)):0;
+    return Math.hypot(x-(s.x1+t*dx),y-(s.y1+t*dy))>14;
+  });reDraw();
+}
+function addTxt(x,y){const t=prompt('أدخل النص:');if(t?.trim()){DT.shapes.push({t:'txt',x1:x,y1:y,tx:t.trim(),col:DT.col,fs:13});reDraw();}}
+
+/* ══════════════════════════════════════════════════════
+   UI BUILDERS
+══════════════════════════════════════════════════════ */
+function buildWL(f=''){
+  const secs={};STKS.filter(s=>!f||(s.sym.includes(f)||s.name.includes(f))).forEach(s=>{if(!secs[s.sec])secs[s.sec]=[];secs[s.sec].push(s);});
+  let h='';
+  Object.entries(secs).forEach(([sec,ss])=>{
+    h+=`<div class="sh">${sec} (${ss.length})</div>`;
+    ss.forEach(s=>{
+      const p=G.pr[s.sym]||0,pc=G.pc[s.sym]||0,sc=G.sc2[s.sym],ir=G.ld.has(s.sym);
+      const sg=sc?.main==='شراء'?{c:'sg-b',l:'شراء'}:sc?.main==='بيع'?{c:'sg-s',l:'بيع'}:{c:'sg-w',l:'—'};
+      h+=`<div class="wi ${s.sym===G.sel?'on':''}" onclick="selStock('${s.sym}')">
+        <span class="ws">${s.sym}</span><span class="wn">${s.name}</span>
+        <div class="wr">
+          <span class="wp ${pc>=0?'up':'dn'}" style="${!ir?'opacity:.5':''}">${p>0?p.toFixed(2):'—'}</span>
+          <span class="wc ${pc>=0?'up':'dn'}">${pc!==0?(pc>=0?'+':'')+pc.toFixed(2)+'%':''}</span>
+          ${ir?`<span class="sg ${sg.c}">${sg.l}</span>`:'<span style="font-size:7px;color:var(--t3)">⟳</span>'}
+        </div></div>`;
+    });
+  });
+  document.getElementById('wl').innerHTML=h||'<div style="padding:12px;color:var(--t3);text-align:center;font-size:10px">لا نتائج</div>';
+  document.getElementById('wcnt').textContent=`${G.ld.size}/${STKS.length}`;
+}
+
+function buildTopBar(){
+  document.getElementById('tickers').innerHTML=PRI.slice(0,12).map(sym=>{
+    const p=G.pr[sym]||0,pc=G.pc[sym]||0,ir=G.ld.has(sym);
+    return `<div class="tk ${sym===G.sel?'on':''}" onclick="selStock('${sym}')">
+      <span class="tk-s">${sym}</span>
+      <span class="tk-p ${pc>=0?'up':'dn'}" style="${!ir?'opacity:.5':''}">${p>0?p.toFixed(2):'…'}</span>
+      <span class="tk-c ${pc>=0?'up':'dn'}">${pc!==0?(pc>=0?'+':'')+pc.toFixed(2)+'%':''}</span>
+    </div>`;
+  }).join('');
+}
+
+function buildHdr(){
+  const sym=G.sel,p=G.pr[sym]||0,c=G.ch[sym]||0,pc=G.pc[sym]||0;
+  const s=STKS.find(x=>x.sym===sym),ind=G.ind[sym],ir=G.ld.has(sym);
+  document.getElementById('csym').textContent=`${sym} — ${s?.name||''}`;
+  document.getElementById('cprice').innerHTML=p>0
+    ?`${p.toFixed(2)} <span style="font-size:9px;color:var(--t2)">ر.س</span>${ir?' <span class="bdg bbl" style="font-size:7px">Yahoo ✓</span>':''}`
+    :`<span style="color:var(--t3);font-size:11px">جاري التحميل...</span>`;
+  const ce=document.getElementById('cchg');
+  if(c!==0){ce.textContent=`${c>=0?'+':''}${c.toFixed(2)} (${pc.toFixed(2)}%)`;ce.className='c-ch '+(c>=0?'up':'dn');ce.style.background=c>=0?'var(--ubg)':'var(--dbg)';}
+  else{ce.textContent='—';ce.className='';ce.style.background='transparent';}
+  document.getElementById('cst').innerHTML=`
+    <div class="cs"><span class="csl">فتح</span><span class="csv">${G.op[sym]?.toFixed(2)||'—'}</span></div>
+    <div class="cs"><span class="csl">أعلى</span><span class="csv" style="color:var(--up)">${G.hi[sym]?.toFixed(2)||'—'}</span></div>
+    <div class="cs"><span class="csl">أدنى</span><span class="csv" style="color:var(--dn)">${G.lo[sym]?.toFixed(2)||'—'}</span></div>
+    <div class="cs"><span class="csl">حجم</span><span class="csv">${fK(G.vo[sym]||0)}</span></div>
+    <div class="cs"><span class="csl">RSI</span><span class="csv" style="color:${ind?(ind.rsi>70?'var(--dn)':ind.rsi<30?'var(--up)':'var(--t1)'):'var(--t3)'}">${ind?ind.rsi.toFixed(1):'—'}</span></div>
+    <div class="cs"><span class="csl">قطاع</span><span class="csv" style="color:var(--cy);font-size:9px">${s?.sec||'—'}</span></div>`;
+  document.getElementById('ss').textContent=sym;
+  const sc=G.sc2[sym];if(sc){const r=document.getElementById('sr');r.textContent=sc.main;r.style.color=sc.main==='شراء'?'var(--up)':sc.main==='بيع'?'var(--dn)':'var(--gd)';}
+}
+
+function buildStatus(){
+  const ups=STKS.filter(s=>(G.pc[s.sym]||0)>0).length;
+  document.getElementById('sup').textContent=ups;
+  document.getElementById('sdn').textContent=STKS.length-ups;
+  document.getElementById('sld').textContent=G.ld.size;
+  document.getElementById('stot').textContent=STKS.length;
+}
+
+function buildSignals(){
+  const sym=G.sel,p=G.pr[sym],sc=G.sc2[sym],ind=G.ind[sym];
+  if(!sc||!p||!ind){document.getElementById('pn-signals').innerHTML='<div class="ldg"><div class="sp"></div>جاري تحميل البيانات...</div>';return;}
+  const{main,str,sigs,buy,sell,entry,tp,sl}=sc;
+  const{rsi,macd,stoch,boll,ichi,vwap,ma9,ma20,ma50}=ind;
+  const cls=main==='شراء'?'buy':main==='بيع'?'sell':'neu';
+  const sc2=str>75?'var(--up)':str>55?'var(--gd)':'var(--dn)';
+  let h=`<div class="sc ${cls}"><div class="sc-h"><span class="sc-n">إشارة رئيسية — ${G.strat.toUpperCase()}</span><span class="sc-t">${T2()}</span></div>
+    <div class="sc-s ${cls}">${main==='شراء'?'▲ شراء':main==='بيع'?'▼ بيع':'◆ انتظار'}</div>
+    <div class="sc-d">${buy} شراء | ${sell} بيع</div>
+    <div class="lv"><div class="lvi"><div class="lvl">الدخول</div><div class="lvv ev">${fN(entry)}</div></div>
+    <div class="lvi"><div class="lvl">الهدف</div><div class="lvv tv">${fN(tp)}</div></div>
+    <div class="lvi"><div class="lvl">الوقف</div><div class="lvv sv">${fN(sl)}</div></div></div>
+    <div class="str"><span class="sl">قوة</span><div class="sb2"><div class="sf" style="width:${str}%;background:${sc2}"></div></div><span class="sv2" style="color:${sc2}">${str}%</span><span class="rrb">R:R 2:1</span></div></div>`;
+
+  const mkC=(t,sg,d)=>{const c=sg==='شراء'?'buy':sg==='بيع'?'sell':'neu';const s=rI(55,90);const s2=s>75?'var(--up)':s>55?'var(--gd)':'var(--dn)';return`<div class="sc ${c}"><div class="sc-h"><span class="sc-n">${t}</span><span class="sc-t">${T2()}</span></div><div class="sc-s ${c}">${sg==='شراء'?'▲ شراء':sg==='بيع'?'▼ بيع':'◆ انتظار'}</div><div class="sc-d">${d}</div><div class="lv"><div class="lvi"><div class="lvl">الدخول</div><div class="lvv ev">${p.toFixed(2)}</div></div><div class="lvi"><div class="lvl">الهدف</div><div class="lvv tv">${tp}</div></div><div class="lvi"><div class="lvl">الوقف</div><div class="lvv sv">${sl}</div></div></div><div class="str"><span class="sl">قوة</span><div class="sb2"><div class="sf" style="width:${s}%;background:${s2}"></div></div><span class="sv2" style="color:${s2}">${s}%</span></div></div>`;};
+  const mkI=(t,rows)=>`<div class="ic"><div class="ict">${t}</div>${rows.map(([l,v,c])=>`<div class="ir"><span class="il">${l}</span><span class="iv" ${c?`style="color:${c}"`:''}>${v}</span></div>`).join('')}</div>`;
+  const mkG=(t,v,mn,mx,cols)=>{const pt=Math.max(0,Math.min(100,(v-mn)/(mx-mn)*100));const c=pt<33?cols[0]:pt<67?cols[1]:cols[2];return`<div class="gc"><div class="gt">${t}</div><div class="gv" style="color:${c}">${fN(v,1)}</div><div class="gtr"><div class="gf" style="width:${pt}%;background:${c}"></div></div><div class="gm"><span>${mn}</span><span>${Math.floor((mn+mx)/2)}</span><span>${mx}</span></div></div>`;};
+
+  const sv=G.strat;
+  if(sv==='classic'){const mn=Math.min(...(G.cans[sym]||[]).slice(-20).map(c=>c.low)),mx=Math.max(...(G.cans[sym]||[]).slice(-20).map(c=>c.high)),d=mx-mn;h+=mkC('الكلاسيك',sigs.classic||'محايد',Math.abs(p-mn)/p<.025?'قرب الدعم':Math.abs(p-mx)/p<.025?'قرب المقاومة':'في المنتصف');h+=mkI('فيبوناتشي',[0,.236,.382,.5,.618,.786,1].map(f=>{const lv=(mn+d*f).toFixed(2);return[`${(f*100).toFixed(1)}%`,lv,Math.abs(lv-p)<d*.04?'var(--bl)':null];}));}
+  else if(sv==='harmonic'){const P=['Gartley','Bat','Butterfly','Crab','Shark','Cypher'];const pat=P[rI(0,P.length)];h+=mkC('الهارمونيك — '+pat,sigs.harmonic||'محايد',`اكتمال ${rI(75,97)}%`);h+=mkI(`نقاط ${pat}`,['X','A','B','C','D'].map(k=>[k,(p*(1+rnd(-.04,.04))).toFixed(2),'var(--pu)']));}
+  else if(sv==='elliott'){const w=rI(1,6);h+=mkC('أمواج إيليوت',sigs.elliott||'محايد',`الموجة ${w} — ${['دافعة','تصحيح','دافعة قوية','تصحيح','نهاية دورة'][w-1]}`);}
+  else if(sv==='ma'){h+=mkC('المتوسطات',sigs.ma||'محايد',ma9>ma20&&ma20>ma50?'تقاطع ذهبي ✓':ma9<ma20&&ma20<ma50?'تقاطع الموت ✗':'متشابكة');h+=mkI('المتوسطات',[['MA9',ma9.toFixed(2),'var(--gd)'],['MA20',ma20.toFixed(2),'var(--bl)'],['MA50',ma50.toFixed(2),'var(--pu)']]);}
+  else if(sv==='osc'){h+=mkC('المذبذبات',sigs.osc||'محايد',`RSI ${rsi.toFixed(1)} — ${rsi>70?'تشبع شرائي':rsi<30?'تشبع بيعي':'محايد'}`);h+=mkG('RSI(14)',rsi,0,100,['var(--up)','var(--bl)','var(--dn)']);h+=`<div class="gc"><div class="gt">MACD</div><div style="display:flex;justify-content:space-between;font-size:9px;margin:3px 0"><span style="color:var(--t2)">MACD</span><span style="color:${macd.v>0?'var(--up)':'var(--dn)'};font-family:monospace">${macd.v.toFixed(3)}</span></div><div style="display:flex;justify-content:space-between;font-size:9px;margin:3px 0"><span style="color:var(--t2)">Signal</span><span style="font-family:monospace">${macd.s.toFixed(3)}</span></div><div style="text-align:center;padding:4px;font-size:10px;font-weight:600;color:${macd.v>macd.s?'var(--up)':'var(--dn)'};">${macd.v>macd.s?'تقاطع صعودي ▲':'تقاطع هبوطي ▼'}</div></div>`;h+=mkG('Stochastic',stoch.k,0,100,['var(--up)','var(--cy)','var(--dn)']);}
+  else if(sv==='ichimoku'){h+=mkC('إيشيموكو',sigs.ichimoku||'محايد',p>ichi.cl?'فوق السحابة ↑':'تحت السحابة ↓');h+=mkI('إيشيموكو',[['Tenkan',ichi.t.toFixed(2),'#f04458'],['Kijun',ichi.k.toFixed(2),'#4a9eff'],['Cloud',ichi.cl.toFixed(2),'var(--cy)'],['الموقع',p>ichi.cl?'فوق ↑':'تحت ↓',p>ichi.cl?'var(--up)':'var(--dn)']]);}
+  else if(sv==='bollinger'){const{u,m,l}=boll;const pb=((p-l)/(u-l)*100).toFixed(1);h+=mkC('بولنجر',sigs.bollinger||'محايد',`%B = ${pb}%`);h+=mkI('بولنجر (20,2)',[['العلوي',u.toFixed(2),'var(--pu)'],['الوسط',m.toFixed(2),'var(--bl)'],['السفلي',l.toFixed(2),'var(--pu)'],['%B',pb+'%',p>u?'var(--dn)':p<l?'var(--up)':null]]);}
+  else if(sv==='vwap'){const d=((p-vwap)/vwap*100).toFixed(2);h+=mkC('VWAP',sigs.vwap||'محايد',`انحراف ${d>0?'+':''}${d}%`);h+=mkI('VWAP',[['VWAP',vwap.toFixed(2),'var(--cy)'],['الانحراف',(d>0?'+':'')+d+'%',d>0?'var(--up)':'var(--dn)']]);}
+  else if(sv==='candle'){const cs=G.cans[sym]||[],n=cs.length;const ps=detCP(cs[n-3],cs[n-2],cs[n-1]);const mp=ps[0]||{n:'—',sg:'neutral',d:'لا نمط'};h+=mkC('الشموع',mp.sg==='buy'?'شراء':mp.sg==='sell'?'بيع':'محايد',`${mp.n} — ${mp.d}`);h+=mkI('الأنماط',ps.map(pt=>[pt.n,pt.d,pt.sg==='buy'?'var(--up)':pt.sg==='sell'?'var(--dn)':'var(--gd)']));}
+  else if(sv==='multi'){h+=`<div class="ic"><div class="ict">تقاطع جميع الاستراتيجيات</div>${Object.entries(sigs).map(([k,v])=>`<div class="ir"><span class="il">${SN[k]||k}</span><span class="iv" style="color:${v==='شراء'?'var(--up)':v==='بيع'?'var(--dn)':'var(--t3)'};font-weight:600">${v==='شراء'?'▲ شراء':v==='بيع'?'▼ بيع':'— محايد'}</span></div>`).join('')}</div>`;}
+  document.getElementById('pn-signals').innerHTML=h;
+}
+
+function detCP(c1,c2,c3){
+  const p=[];if(!c1||!c2||!c3)return[{n:'—',sg:'neutral',d:'—'}];
+  const bs=c=>Math.abs(c.close-c.open),wu=c=>c.high-Math.max(c.open,c.close),wd=c=>Math.min(c.open,c.close)-c.low;
+  if(bs(c3)<(c3.high-c3.low)*.1)p.push({n:'دوجي',sg:'neutral',d:'تردد'});
+  if(wd(c3)>bs(c3)*2&&c3.close>c3.open)p.push({n:'مطرقة',sg:'buy',d:'انعكاس صعودي'});
+  if(wu(c3)>bs(c3)*2)p.push({n:'شهاب',sg:'sell',d:'انعكاس هبوطي'});
+  if(c3.close>c3.open&&c2.close<c2.open&&c3.open<c2.close&&c3.close>c2.open)p.push({n:'ابتلاع صعودي',sg:'buy',d:'شراء قوي'});
+  if(c3.close<c3.open&&c2.close>c2.open&&c3.open>c2.close&&c3.close<c2.open)p.push({n:'ابتلاع هبوطي',sg:'sell',d:'بيع قوي'});
+  if(c1.close>c1.open&&bs(c2)<bs(c1)*.3&&c3.close>c1.close)p.push({n:'نجمة الصباح',sg:'buy',d:'انعكاس صعودي'});
+  if(c1.close<c1.open&&bs(c2)<bs(c1)*.3&&c3.close<c1.close)p.push({n:'نجمة المساء',sg:'sell',d:'انعكاس هبوطي'});
+  if(!p.length)p.push({n:'شمعة عادية',sg:'neutral',d:'لا نمط انعكاسي'});
+  return p;
+}
+
+function buildDepth(){
+  const p=G.pr[G.sel];if(!p){document.getElementById('pn-depth').innerHTML='<div class="ldg"><div class="sp"></div></div>';return;}
+  let h='<div class="obh"><span>حجم</span><span>عرض</span><span>تراكمي</span></div>';let cum=0;
+  for(let i=5;i>=1;i--){const ap=+(p+i*p*.001).toFixed(2),v=rI(200,12000);cum+=v;const pt=Math.min(100,v/12000*100);h+=`<div class="ob"><div class="obbar" style="background:var(--dn);width:${pt}%"></div><span class="obp" style="color:var(--dn)">${ap.toFixed(2)}</span><span class="obv">${fK(v)}</span><span class="obt">${fK(cum)}</span></div>`;}
+  h+=`<div class="obs">${p.toFixed(2)} ر.س</div>`;cum=0;h+='<div class="obh" style="margin-top:2px"><span>حجم</span><span>طلب</span><span>تراكمي</span></div>';
+  for(let i=1;i<=5;i++){const bp=+(p-i*p*.001).toFixed(2),v=rI(200,12000);cum+=v;const pt=Math.min(100,v/12000*100);h+=`<div class="ob"><div class="obbar" style="background:var(--up);width:${pt}%"></div><span class="obp" style="color:var(--up)">${bp.toFixed(2)}</span><span class="obv">${fK(v)}</span><span class="obt">${fK(cum)}</span></div>`;}
+  document.getElementById('pn-depth').innerHTML=h;
+}
+
+function buildTrades(){
+  const t=G.trd[G.sel]||[];let h='<div class="obh"><span>الوقت</span><span>السعر</span><span>حجم</span><span>↕</span></div>';
+  if(!t.length)h+='<div class="ldg"><span style="color:var(--t3)">لا توجد صفقات</span></div>';
+  else t.slice().reverse().slice(0,25).forEach(t=>{h+=`<div class="tr"><span class="trt">${t.time}</span><span class="trp" style="color:${t.dir==='buy'?'var(--up)':'var(--dn)'}">${t.price.toFixed(2)}</span><span class="trv">${fK(t.vol)}</span><span style="font-size:8px;color:${t.dir==='buy'?'var(--up)':'var(--dn)'}">${t.dir==='buy'?'▲':'▼'}</span></div>`;});
+  document.getElementById('pn-trades').innerHTML=h;
+}
+
+function buildInfo(){
+  const sym=G.sel,s=STKS.find(x=>x.sym===sym),p=G.pr[sym],sc=G.sc2[sym],ir=G.ld.has(sym);
+  let h=`<div class="ic"><div class="ict">معلومات السهم</div>
+    <div class="ir"><span class="il">الرمز</span><span class="iv" style="color:var(--bl)">${sym}</span></div>
+    <div class="ir"><span class="il">الاسم</span><span class="iv">${s?.name||'—'}</span></div>
+    <div class="ir"><span class="il">القطاع</span><span class="iv" style="color:var(--cy)">${s?.sec||'—'}</span></div>
+    <div class="ir"><span class="il">السعر</span><span class="iv">${p?.toFixed(2)||'—'} ر.س</span></div>
+    <div class="ir"><span class="il">الأعلى</span><span class="iv" style="color:var(--up)">${G.hi[sym]?.toFixed(2)||'—'}</span></div>
+    <div class="ir"><span class="il">الأدنى</span><span class="iv" style="color:var(--dn)">${G.lo[sym]?.toFixed(2)||'—'}</span></div>
+    <div class="ir"><span class="il">الحجم</span><span class="iv">${fK(G.vo[sym]||0)}</span></div>
+    <div class="ir"><span class="il">البيانات</span><span class="iv" style="color:${ir?'var(--up)':'var(--gd)'}">${ir?'Yahoo Finance ✓':'تقريبي'}</span></div>
+  </div>`;
+  if(sc)h+=`<div class="ic"><div class="ict">ملخص الإشارات</div>${Object.entries(sc.sigs).map(([k,v])=>`<div class="ir"><span class="il">${SN[k]||k}</span><span class="iv" style="color:${v==='شراء'?'var(--up)':v==='بيع'?'var(--dn)':'var(--t3)'}">${v}</span></div>`).join('')}</div>`;
+  document.getElementById('pn-info').innerHTML=h;
+}
+
+/* ══════════════════════════════════════════════════════
+   FILTER
+══════════════════════════════════════════════════════ */
+const FRS={col:'score',dir:-1},FPF=new Set(['all']);let FPB=false,FPS=false,FPST=false;
+function toggleFP(){G.fpOpen=!G.fpOpen;document.getElementById('fpbd').style.display=G.fpOpen?'':'none';document.getElementById('fpa').textContent=G.fpOpen?'▲':'▼';}
+function toggleFC(el,m){
+  if(m==='all'){FPF.clear();FPF.add('all');document.querySelectorAll('.fc').forEach(f=>f.classList.remove('on','og'));el.classList.add('on');}
+  else if(['buy_only','sell_only','strong'].includes(m)){el.classList.toggle('og');if(m==='buy_only')FPB=el.classList.contains('og');if(m==='sell_only')FPS=el.classList.contains('og');if(m==='strong')FPST=el.classList.contains('og');}
+  else{FPF.delete('all');document.querySelector('.fc[onclick*="\'all\'"]').classList.remove('on');FPF.has(m)?FPF.delete(m):FPF.add(m);el.classList.toggle('on');if(!FPF.size){FPF.add('all');document.querySelector('.fc[onclick*="\'all\'"]').classList.add('on');}}
+  buildFilter();
+}
+function sortFR(col){FRS.dir=FRS.col===col?FRS.dir*-1:-1;FRS.col=col;buildFilter();}
+function buildFilter(){
+  let rows=STKS.map(s=>{const sc=G.sc2[s.sym],p=G.pr[s.sym];if(!sc||!p)return null;let ok=FPF.has('all');if(!ok)for(const f of FPF)if(sc.sigs[f]&&sc.sigs[f]!=='محايد'){ok=true;break;}if(!ok||FPB&&sc.main!=='شراء'||FPS&&sc.main!=='بيع'||FPST&&sc.str<80)return null;return{sym:s.sym,name:s.name,price:p,pct:G.pc[s.sym]||0,score:sc.str,signal:sc.main,entry:sc.entry,tp:sc.tp,sl:sc.sl,actv:sc.actv,ir:G.ld.has(s.sym)};}).filter(Boolean);
+  rows.sort((a,b)=>{const av=typeof a[FRS.col]==='string'?a[FRS.col]:+a[FRS.col],bv=typeof b[FRS.col]==='string'?b[FRS.col]:+b[FRS.col];return(av>bv?1:av<bv?-1:0)*FRS.dir;});
+  document.getElementById('fpb').textContent=`${rows.length} نتيجة`;
+  document.getElementById('frb').innerHTML=rows.slice(0,60).map((r,i)=>{
+    const hi=i<3&&FRS.col==='score'&&FRS.dir===-1,sc2=r.signal==='شراء'?'up':r.signal==='بيع'?'dn':'',tags=r.actv.slice(0,3).map(k=>`<span class="stg">${SN[k]||k}</span>`).join(''),dot=r.ir?'<span style="color:var(--up);font-size:8px">●</span>':'<span style="color:var(--t3);font-size:8px">○</span>';
+    return `<tr class="${hi?'hi':''}" onclick="selStock('${r.sym}')">
+      <td style="font-weight:600;color:var(--bl);font-family:monospace">${dot}${r.sym}</td><td>${r.name}</td>
+      <td style="font-family:monospace">${r.price.toFixed(2)}</td><td class="${sc2}">${r.pct>=0?'+':''}${r.pct.toFixed(2)}%</td>
+      <td><span class="scb"><span class="scf" style="width:${r.score}%;background:${r.score>75?'var(--up)':r.score>55?'var(--gd)':'var(--dn)'}"></span></span>${r.score}%</td>
+      <td>${tags}</td><td class="${sc2}" style="font-weight:600">${r.signal==='شراء'?'▲ شراء':r.signal==='بيع'?'▼ بيع':'—'}</td>
+      <td style="color:var(--bl)">2.0</td><td>${r.entry.toFixed(2)}</td><td style="color:var(--up)">${r.tp.toFixed(2)}</td><td style="color:var(--dn)">${r.sl.toFixed(2)}</td>
+      <td><button onclick="event.stopPropagation();selStock('${r.sym}')" style="background:var(--bl2);border:1px solid rgba(74,158,255,.3);color:var(--bl);padding:1px 5px;border-radius:2px;cursor:pointer;font-size:9px;font-family:inherit">↗</button></td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="12" style="padding:12px;text-align:center;color:var(--t3)">لا توجد نتائج</td></tr>';
+}
+function doScan(){STKS.forEach(s=>{if(G.pr[s.sym])calcSc(s.sym);});buildFilter();}
+function showTop(){FPF.clear();FPF.add('all');FPST=true;document.querySelectorAll('.fc').forEach(f=>f.classList.remove('on','og'));document.querySelector('.fc[onclick*="\'all\'"]')?.classList.add('on');document.querySelector('.fc[onclick*="\'strong\'"]')?.classList.add('og');FRS.col='score';FRS.dir=-1;buildFilter();if(!G.fpOpen)toggleFP();}
+
+/* ══════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════ */
+function selStock(sym){
+  G.sel=sym;
+  buildHdr(); buildTopBar(); buildWL(document.getElementById('wlsr').value);
+  drawChart(sym); buildSignals(); buildDepth(); buildTrades(); buildInfo();
+  // Load real data if not yet loaded
+  if(!G.ld.has(sym)&&!G.ldg.has(sym)){
+    loadS(sym).then(()=>{
+      buildHdr(); buildTopBar(); buildWL(document.getElementById('wlsr').value);
+      drawChart(sym); buildSignals(); buildFilter();
+    });
+  }
+}
+
+function setSt(st,el){
+  G.strat=st;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on')); el.classList.add('on');
+  document.getElementById('sst').textContent=el.textContent.trim();
+  drawOverlays(G.sel); drawInd(G.sel); buildSignals();
+}
+
+function setTF(range,interval,el){
+  G.tf=range; G.tfi=interval;
+  document.querySelectorAll('.tf').forEach(b=>b.classList.remove('on')); el.classList.add('on');
+  G.ld.delete(G.sel);
+  loadS(G.sel,range,interval).then(()=>{buildHdr();drawChart(G.sel);buildSignals();});
+}
+
+function setTab(tab,el){
+  G.tab=tab;
+  document.querySelectorAll('.rt').forEach(t=>t.classList.remove('on')); el.classList.add('on');
+  document.querySelectorAll('.pn').forEach(p=>p.classList.remove('on')); document.getElementById('pn-'+tab).classList.add('on');
+  if(tab==='signals')buildSignals(); else if(tab==='depth')buildDepth(); else if(tab==='trades')buildTrades(); else buildInfo();
+}
+
+async function doRefresh(){
+  const sym=G.sel,btn=document.getElementById('rfBtn'); btn.textContent='↻...'; btn.disabled=true;
+  G.ld.delete(sym); G.ldg.delete(sym);
+  await loadS(sym); buildHdr(); drawChart(sym); buildSignals(); buildFilter(); buildWL(document.getElementById('wlsr').value);
+  btn.textContent='↻ تحديث'; btn.disabled=false;
+}
+
+/* ══════════════════════════════════════════════════════
+   INIT — الأمثل والأنظف
+══════════════════════════════════════════════════════ */
+function init(){
+  // 1) بيانات تجريبية فورية لجميع الأسهم
+  STKS.forEach(s=>initDemo(s.sym));
+
+  // 2) أنشئ الشارت
+  createLC();
+  initDC();
+
+  // 3) ابنِ الواجهة كاملة
+  buildTopBar(); buildWL(); buildHdr(); buildStatus(); buildFilter();
+  drawChart(G.sel); buildSignals(); buildDepth(); buildTrades(); buildInfo();
+
+  // 4) تحميل Yahoo Finance للأسهم الأهم (في الخلفية)
+  function refreshAll(){
+    buildTopBar(); buildWL(document.getElementById('wlsr').value);
+    buildHdr(); buildStatus(); buildFilter();
+    drawChart(G.sel); drawOverlays(G.sel); buildSignals();
+  }
+
+  setTimeout(()=>Promise.allSettled(PRI.slice(0,5).map(s=>loadS(s))).then(refreshAll), 200);
+  setTimeout(()=>Promise.allSettled(PRI.slice(5).map(s=>loadS(s))).then(()=>{buildTopBar();buildWL(document.getElementById('wlsr').value);buildStatus();buildFilter();}), 2000);
+
+  // 5) باقي الأسهم بالخلفية
+  setTimeout(async()=>{
+    const rest=STKS.filter(s=>!PRI.includes(s.sym)).map(s=>s.sym);
+    for(let i=0;i<rest.length;i+=5){
+      await Promise.allSettled(rest.slice(i,i+5).map(s=>loadS(s)));
+      await new Promise(r=>setTimeout(r,350));
+      buildTopBar(); buildWL(document.getElementById('wlsr').value); buildStatus(); buildFilter();
+    }
+  },3500);
+
+  // 6) ساعة
+  setInterval(()=>{document.getElementById('clk').textContent=new Date().toLocaleTimeString('ar-SA');buildStatus();},5000);
+}
+
+// انتظر رسم الصفحة قبل التهيئة
+window.addEventListener('load',()=>requestAnimationFrame(()=>requestAnimationFrame(init)));
+</script>
+</body>
+</html>
